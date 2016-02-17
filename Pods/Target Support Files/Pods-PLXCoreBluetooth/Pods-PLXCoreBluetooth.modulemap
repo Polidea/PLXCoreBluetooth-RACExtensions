@@ -1,0 +1,6 @@
+framework module Pods_PLXCoreBluetooth {
+  umbrella header "Pods-PLXCoreBluetooth-umbrella.h"
+
+  export *
+  module * { export * }
+}
