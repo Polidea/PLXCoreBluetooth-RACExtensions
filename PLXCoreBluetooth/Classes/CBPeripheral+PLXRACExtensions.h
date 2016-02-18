@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @discussion					Discovers the specified included service(s) of <i>service</i>.
  *                              This method returns signal with discovered included servises.
  */
-- (RACSignal *)rac_discoverIncludedServices:(NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service;
+- (RACSignal *)rac_discoverIncludedServices:(nullable NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service;
 
 /*!
  *  @method rac_discoverCharacteristics:forService:
@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @discussion					Discovers the specified characteristic(s) of <i>service</i>.
  *                              This method returns signal with discovered characteristics.
  */
-- (RACSignal *)rac_discoverCharacteristics:(NSArray<CBUUID *> *)characteristicUUIDs forService:(CBService *)service;
+- (RACSignal *)rac_discoverCharacteristics:(nullable NSArray<CBUUID *> *)characteristicUUIDs forService:(CBService *)service;
 
 /*!
  *  @method rac_readValueForCharacteristic:
