@@ -13,6 +13,8 @@
 		6622FE7137DE9AF1AC1EDBF7 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E3BBD225F1AF2400CC7447F /* Pods.framework */; };
 		7A18759030BF076AD7F1E7C9 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A18798EB6BEE50299E1FAC8 /* CoreBluetooth.framework */; };
 		8108638ED735D62122122282 /* CBPeripheral+PLXRACExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 81086D8400EA54E85C5640F4 /* CBPeripheral+PLXRACExtensions.m */; };
+		810865D802C090A329B1C6A5 /* CBCentralManager+PLXRACExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8108624AF9091558D47DA9D7 /* CBCentralManager+PLXRACExtensions.m */; };
+		8108670C2850B20BF4BC24E0 /* CBCentralManager+PLXRACExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 81086D08B57A2DEB0721FBB4 /* CBCentralManager+PLXRACExtensions.h */; };
 		81086AA9A1154FA09293ACCC /* CBPeripheral+PLXRACExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 810866A17A86A39C22B6524D /* CBPeripheral+PLXRACExtensions.h */; };
 		FD70BC3A93F3B47EAA841E85 /* Pods_PLXCoreBluetoothTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B332CE380F05434886867E3C /* Pods_PLXCoreBluetoothTests.framework */; };
 /* End PBXBuildFile section */
@@ -39,7 +41,9 @@
 		5E3BBD225F1AF2400CC7447F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		61D4155183D1083DAE0EEE23 /* Pods-PLXCoreBluetoothTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetoothTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetoothTests/Pods-PLXCoreBluetoothTests.release.xcconfig"; sourceTree = "<group>"; };
 		7A18798EB6BEE50299E1FAC8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		8108624AF9091558D47DA9D7 /* CBCentralManager+PLXRACExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBCentralManager+PLXRACExtensions.m"; sourceTree = "<group>"; };
 		810866A17A86A39C22B6524D /* CBPeripheral+PLXRACExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBPeripheral+PLXRACExtensions.h"; sourceTree = "<group>"; };
+		81086D08B57A2DEB0721FBB4 /* CBCentralManager+PLXRACExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBCentralManager+PLXRACExtensions.h"; sourceTree = "<group>"; };
 		81086D8400EA54E85C5640F4 /* CBPeripheral+PLXRACExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBPeripheral+PLXRACExtensions.m"; sourceTree = "<group>"; };
 		B332CE380F05434886867E3C /* Pods_PLXCoreBluetoothTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PLXCoreBluetoothTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD55427C2604E09DB5A8A71 /* Pods-PLXCoreBluetoothTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetoothTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetoothTests/Pods-PLXCoreBluetoothTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 			children = (
 				81086D8400EA54E85C5640F4 /* CBPeripheral+PLXRACExtensions.m */,
 				810866A17A86A39C22B6524D /* CBPeripheral+PLXRACExtensions.h */,
+				8108624AF9091558D47DA9D7 /* CBCentralManager+PLXRACExtensions.m */,
+				81086D08B57A2DEB0721FBB4 /* CBCentralManager+PLXRACExtensions.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -145,6 +151,7 @@
 			files = (
 				0EC101FC1C74B57100B9E618 /* PLXCoreBluetooth.h in Headers */,
 				81086AA9A1154FA09293ACCC /* CBPeripheral+PLXRACExtensions.h in Headers */,
+				8108670C2850B20BF4BC24E0 /* CBCentralManager+PLXRACExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8108638ED735D62122122282 /* CBPeripheral+PLXRACExtensions.m in Sources */,
+				810865D802C090A329B1C6A5 /* CBCentralManager+PLXRACExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
