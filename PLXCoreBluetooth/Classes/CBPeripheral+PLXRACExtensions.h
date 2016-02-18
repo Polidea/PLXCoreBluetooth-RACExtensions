@@ -10,6 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @property rac_name
  *
  *  @discussion			This property returns most recent name and subscribes for <i>peripheral</i> name changes.
+ *
+ *  @see                rac_peripheralDidUpdateName
  */
 @property(nonatomic, strong, readonly) RACSignal *rac_name;
 
@@ -21,12 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)rac_peripheralDidUpdateName NS_AVAILABLE(NA, 6_0);
 
 /*!
- *  @method rac_peripheralDidModifyServices
+ *  @method rac_readRSSI
  *
- *  @discussion			This method returns signal containing @link services @/link of <i>peripheral</i> that have been changed.
-
+ *  @discussion This method returns signal with RSSI and completes, error otherwise.
+ *
+ *  @see        rac_peripheralDidReadRSSI
  */
-- (RACSignal *)rac_peripheralDidModifyServices NS_AVAILABLE(NA, 7_0);
+- (RACSignal *)rac_readRSSI;
 
 /*!
  *  @method rac_discoverServices:
@@ -36,16 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @discussion			This method returns signal with discovered services.
  */
-- (RACSignal *)rac_discoverServices:(nullable NSArray<CBUUID *> *)services;
-
-/*!
- *  @method rac_readRSSI
- *
- *  @discussion While connected, retrieves the current RSSI of the link.
- *
- *  @see        rac_peripheralDidReadRSSI
- */
-- (RACSignal *)rac_readRSSI;
+- (RACSignal *)rac_discoverServices:(nullable NSArray<CBUUID *> *)serviceUUIDs;
 
 /*!
  *  @method rac_discoverIncludedServices:forService:
@@ -58,6 +52,15 @@ NS_ASSUME_NONNULL_BEGIN
  *                              This method returns signal with discovered included servises.
  */
 - (RACSignal *)rac_discoverIncludedServices:(nullable NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service;
+
+/*!
+ *  @method rac_peripheralDidModifyServices
+ *
+ *  @discussion			This method returns signal containing @link services @/link of <i>peripheral</i> that have been changed.
+ *
+ */
+- (RACSignal *)rac_peripheralDidModifyServices NS_AVAILABLE(NA, 7_0);
+
 
 /*!
  *  @method rac_discoverCharacteristics:forService:
@@ -77,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param characteristic	A GATT characteristic.
  *
  *  @discussion				Reads the characteristic value for <i>characteristic</i>.
- *                          This method returns <code>@YES</code> and completes if read succeeds.
+ *                          This method returns read value and completes if read succeeds, error otherwise.
  */
 - (RACSignal *)rac_readValueForCharacteristic:(CBCharacteristic *)characteristic;
 
@@ -92,17 +95,9 @@ NS_ASSUME_NONNULL_BEGIN
  *							If the <code>CBCharacteristicWriteWithoutResponse</code> type is specified, the delivery of the data is best-effort and not
  *							guaranteed.
  *
- *                          This method returns signal with <code>@YES</code> and completes if read succeeds or error otherwise.
+ *                          This method returns signal with <code>@YES</code> and completes if read succeeds, error otherwise.
  */
 - (RACSignal *)rac_writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic writeType:(CBCharacteristicWriteType)writeType;
-
-/*!
- *  @method		rac_maximumWriteValueLengthForType:
- *
- *  @discussion	The maximum amount of data, in bytes, that can be sent to a characteristic in a single write type.
- *              This method return immediately with proper value.
- */
-- (RACSignal *)rac_maximumWriteValueLengthForType:(CBCharacteristicWriteType)type NS_AVAILABLE(NA, 9_0);
 
 /*!
  *  @method rac_discoverDescriptorsForCharacteristic:
@@ -110,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param characteristic	A GATT characteristic.
  *
  *  @discussion				Discovers the characteristic descriptor(s) of <i>characteristic</i>.
- *                          This method returns signal with discovered descriptions for given characteristic.
+ *                          This method returns signal with discovered descriptors (NSArray<CBDescriptor *>) for given characteristic.
  */
 - (RACSignal *)rac_discoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic;
 
@@ -120,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param descriptor	A GATT characteristic descriptor.
  *
  *  @discussion			Reads the value of <i>descriptor</i>.
- *                      This method returns signal with read value for given descriptor.
+ *                      This method returns signal with read value for given descriptor and completes, error otherwise.
  */
 - (RACSignal *)rac_readValueForDescriptor:(CBDescriptor *)descriptor;
 
@@ -130,10 +125,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param data			The value to write.
  *  @param descriptor	A GATT characteristic descriptor.
  *
- *  @discussion			Writes <i>data</i> to <i>descriptor</i>'s value. Client characteristic configuration descriptors cannot be written using
- *						this method, and should instead use @link setNotifyValue:forCharacteristic: @/link.
- *
- *                      This method returns signal with <code>@YES</code> and completes if write succeeds or error otherwise.
+ *  @discussion			Writes <i>data</i> to <i>descriptor</i>'s value.
+ *                      This method returns signal with <code>@YES</code> and completes if write succeeds, error otherwise.
  */
 - (RACSignal *)rac_writeValue:(NSData *)data forDescriptor:(CBDescriptor *)descriptor;
 
@@ -161,6 +154,15 @@ NS_ASSUME_NONNULL_BEGIN
  *							This method returns signal with updated values (from peripheral:didUpdateValueForCharacteristic:error: callback) or error if update fails.
  */
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic;
+
+/*!
+ *  @method rac_listenForUpdatesForCharacteristic
+ *
+ *  @param characteristic	The characteristic to listen for.
+ *
+ *  @discussion             This method return a stream of signals that contains next values or error for each update for given characteristic.
+ */
+- (RACSignal *)rac_listenForUpdatesForCharacteristic:(nullable CBCharacteristic *)characteristic;
 
 @end
 

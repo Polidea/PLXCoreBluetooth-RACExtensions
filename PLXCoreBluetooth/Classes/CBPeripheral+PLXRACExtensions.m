@@ -6,6 +6,10 @@
     return nil;
 }
 
+- (RACSignal *)rac_RSSI {
+    return nil;
+}
+
 - (RACSignal *)rac_peripheralDidUpdateName {
     return nil;
 }
@@ -59,6 +63,10 @@
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic {
+    return nil;
+}
+
+- (RACSignal *)rac_listenForUpdatesForCharacteristic:(CBCharacteristic *)characteristic {
     return nil;
 }
 
