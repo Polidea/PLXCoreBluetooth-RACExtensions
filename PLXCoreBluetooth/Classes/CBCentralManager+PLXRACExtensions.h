@@ -6,6 +6,10 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
 
 @interface CBCentralManager (PLXRACExtensions)
 
+/// A delegate proxy which will be set as the receiver's delegate when any of the
+/// methods in this category are used.
+@property (nonatomic, strong, readonly) RACDelegateProxy *rac_delegateProxy;
+
 /*!
  *  @method rac_isPoweredOn
  *
@@ -37,7 +41,7 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
  *  @param peripheral   The <code>CBPeripheral</code> to be connected.
  *  @param options      An optional dictionary specifying connection behavior options.
  *
- *  @discussion         This method returns signal with <code>@YES</code> and completes if connect succeeds, error otherwise.
+ *  @discussion         This method returns signal with peripheral and completes if connect succeeds, error otherwise.
  *
  *  @see                connectPeripheral:options:
  */
@@ -48,7 +52,7 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
  *
  *  @param peripheral   A <code>CBPeripheral</code>.
  *
- *  @discussion         This method returns signal with <code>@YES</code> and completed if disconnect succeeds, error otherwise.
+ *  @discussion         This method returns signal with peripheral and completed if disconnect succeeds, error otherwise.
  *
  *  @see                cancelPeripheralConnection:
  */
