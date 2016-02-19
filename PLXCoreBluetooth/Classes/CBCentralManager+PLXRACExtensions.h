@@ -29,7 +29,7 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
  *  @discussion         This method will provide first <code>count</code> discovered peripherals, then will stop scan.
  *                      If <code>count</code> is PLXCBCentralManagerScanInfiniteCount, it will never stop scan.
  *
- *                      This method returns signal with <code>count</code> (or infinite) discovered peripherals, or error when scan fails.
+ *                      This method returns signal with <code>count</code> (or infinite) tuples containing peripheral, advertismentData and RSSIs, or error when scan fails.
  *
  *  @see                scanForPeripheralsWithServices:options:
  */
