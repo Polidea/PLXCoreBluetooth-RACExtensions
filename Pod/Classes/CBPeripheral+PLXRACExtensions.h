@@ -6,6 +6,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBPeripheral (PLXRACExtensions)
 
+/// A delegate proxy which will be set as the receiver's delegate when any of the
+/// methods in this category are used.
+@property (nonatomic, strong, readonly) RACDelegateProxy *rac_delegateProxy;
+
 /*!
  *  @property rac_name
  *
@@ -29,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @discussion This method returns signal with RSSI and completes, error otherwise.
  *
- *  @see        rac_peripheralDidReadRSSI
+ *  @see        peripheralDidReadRSSI
  */
 - (RACSignal *)rac_readRSSI;
 
