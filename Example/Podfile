@@ -1,0 +1,15 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+pod 'ReactiveCocoa', '2.5'
+
+target 'PLXCoreBluetooth_Example', :exclusive => true do
+  pod 'PLXCoreBluetooth', :path => '../'
+end
+
+target 'PLXCoreBluetooth_Tests', :exclusive => true do
+  pod 'PLXCoreBluetooth', :path => '../'
+
+  pod 'Specta'
+  pod 'Expecta'
+end

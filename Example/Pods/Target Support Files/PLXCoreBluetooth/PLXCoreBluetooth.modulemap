@@ -1,0 +1,6 @@
+framework module PLXCoreBluetooth {
+  umbrella header "PLXCoreBluetooth-umbrella.h"
+
+  export *
+  module * { export * }
+}
