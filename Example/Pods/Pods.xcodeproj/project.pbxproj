@@ -169,6 +169,10 @@
 		7F5E35ABD21443058AF7560431476D43 /* NSEnumerator+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F98B7820ADBB4717E3FAEDE981E4E2E6 /* NSEnumerator+RACSequenceAdditions.m */; };
 		805E425BBEF7A6133E32E1D30A073010 /* EXPExpect.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA60D0438F16D01DA7BD9441A1BB29B /* EXPExpect.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		806D6E792FEE9BEBDA9B019572B74EAC /* NSObject+RACDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EFB6096C88AAB90283311AABBD114653 /* NSObject+RACDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8108624B5FBECDC3FBBE68FC /* _RACCBPeripheralInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8108631CB789A81F75EA4EB1 /* _RACCBPeripheralInternal.m */; };
+		8108637B6077B0DBF9BEF95C /* RACSignal+PLXBluetoothRACUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 810864FF9DCECBD3D0FB4F7D /* RACSignal+PLXBluetoothRACUtilities.h */; };
+		810863C9EDC7E258FF9D36CF /* RACSignal+PLXBluetoothRACUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 810868C22C011D50932DA2F0 /* RACSignal+PLXBluetoothRACUtilities.m */; };
+		810867C693D4A67D038ADAD9 /* _RACCBPeripheralInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 81086B0FB46E7B9832077BFD /* _RACCBPeripheralInternal.h */; };
 		81AA570E0B07E802A1BCE530495F2C34 /* RACTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 16B4E428F45649234EDA168DE14ACAF1 /* RACTuple.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8285C589E8B32E8D91DF35167DFA552E /* RACTupleSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D81CBFD085B6B5E12D9703576D94D2A /* RACTupleSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837B593D7C1D01B4EA400247309D6AB0 /* Expecta-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CEECE8F60064543E4AE6E1DE472BB8C /* Expecta-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -581,6 +585,10 @@
 		7EA87280DEB898DE20452EC284B0E434 /* UIControl+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIControl+RACSignalSupport.h"; path = "ReactiveCocoa/UIControl+RACSignalSupport.h"; sourceTree = "<group>"; };
 		7F0D2D96E1D98150A9D1F7C57BE3839C /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCompiledExample.m; path = Specta/Specta/SPTCompiledExample.m; sourceTree = "<group>"; };
 		7FAD293BA07C44681D5AA6A72BEE010B /* NSObject+RACDeallocating.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+RACDeallocating.m"; path = "ReactiveCocoa/NSObject+RACDeallocating.m"; sourceTree = "<group>"; };
+		8108631CB789A81F75EA4EB1 /* _RACCBPeripheralInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _RACCBPeripheralInternal.m; sourceTree = "<group>"; };
+		810864FF9DCECBD3D0FB4F7D /* RACSignal+PLXBluetoothRACUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+PLXBluetoothRACUtilities.h"; sourceTree = "<group>"; };
+		810868C22C011D50932DA2F0 /* RACSignal+PLXBluetoothRACUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+PLXBluetoothRACUtilities.m"; sourceTree = "<group>"; };
+		81086B0FB46E7B9832077BFD /* _RACCBPeripheralInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _RACCBPeripheralInternal.h; sourceTree = "<group>"; };
 		81E530855D77982F8B0205711DDB621C /* MKAnnotationView+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MKAnnotationView+RACSignalSupport.h"; path = "ReactiveCocoa/MKAnnotationView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		8257BEDA8E2EEDFF63D2392ED23FFA60 /* EXPMatchers+beginWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beginWith.h"; path = "Expecta/Matchers/EXPMatchers+beginWith.h"; sourceTree = "<group>"; };
 		82BE8D4F60866A83086E4E325A236163 /* RACImmediateScheduler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACImmediateScheduler.m; path = ReactiveCocoa/RACImmediateScheduler.m; sourceTree = "<group>"; };
@@ -1150,6 +1158,10 @@
 				E4515C8F5DFA64EA2198465E09FFC74E /* CBPeripheral+PLXRACExtensions.h */,
 				4CF46B8DCC17D584D93C00F945EDE78C /* CBPeripheral+PLXRACExtensions.m */,
 				DF30CDBCCD09584DFF5604E9EA16567B /* PLXCoreBluetooth.h */,
+				8108631CB789A81F75EA4EB1 /* _RACCBPeripheralInternal.m */,
+				81086B0FB46E7B9832077BFD /* _RACCBPeripheralInternal.h */,
+				810868C22C011D50932DA2F0 /* RACSignal+PLXBluetoothRACUtilities.m */,
+				810864FF9DCECBD3D0FB4F7D /* RACSignal+PLXBluetoothRACUtilities.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1555,6 +1567,8 @@
 				A351DD95F6268BC19637AB2A5476EC90 /* CBPeripheral+PLXRACExtensions.h in Headers */,
 				E469AC931DBB218DE038162CB4A85085 /* PLXCoreBluetooth-umbrella.h in Headers */,
 				B5A7A9358B6AEB032BA30CF95D74BAD5 /* PLXCoreBluetooth.h in Headers */,
+				810867C693D4A67D038ADAD9 /* _RACCBPeripheralInternal.h in Headers */,
+				8108637B6077B0DBF9BEF95C /* RACSignal+PLXBluetoothRACUtilities.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1805,6 +1819,8 @@
 				E957F3FB1C3D05FB6347F6B8850F3D46 /* CBCentralManager+PLXRACExtensions.m in Sources */,
 				EA8FB45C06CFCBB7B746E0A496F13C06 /* CBPeripheral+PLXRACExtensions.m in Sources */,
 				0664FC4E4E8DC39A9E8F289126C29C99 /* PLXCoreBluetooth-dummy.m in Sources */,
+				8108624B5FBECDC3FBBE68FC /* _RACCBPeripheralInternal.m in Sources */,
+				810863C9EDC7E258FF9D36CF /* RACSignal+PLXBluetoothRACUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2098,7 +2114,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/PLXCoreBluetooth/PLXCoreBluetooth-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/PLXCoreBluetooth/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PLXCoreBluetooth/PLXCoreBluetooth.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -2500,7 +2516,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/PLXCoreBluetooth/PLXCoreBluetooth-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/PLXCoreBluetooth/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PLXCoreBluetooth/PLXCoreBluetooth.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
