@@ -148,6 +148,11 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic writeType:(CBCharacteristicWriteType)writeType {
+    if (writeType == CBCharacteristicWriteWithoutResponse) {
+        [self writeValue:data forCharacteristic:characteristic type:writeType];
+        return [RACSignal return:@YES];
+    }
+
     RACSignal *signal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
@@ -238,12 +243,27 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *updateNotificationStateSignal = [[[self.rac_delegateProxy
+            signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
+            takeUntil:self.rac_willDeallocSignal]
+            reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
+                return error ?: @YES;
+            }];
+
+    RACSignal *updateValueSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.value;
             }];
+
+    RACSignal *signal = [RACSignal combineLatest:@[updateNotificationStateSignal, updateValueSignal]
+                                          reduce:^id(id notificationValue, id characteristicValue) {
+                                              if ([notificationValue isKindOfClass:[NSError class]]) {
+                                                  return notificationValue;
+                                              }
+                                              return updateValueSignal;
+                                          }];
 
     RACUseDelegateProxy(self);
     @weakify(self)
