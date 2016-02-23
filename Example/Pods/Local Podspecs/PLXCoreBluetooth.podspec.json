@@ -1,0 +1,34 @@
+{
+  "name": "PLXCoreBluetooth",
+  "version": "0.1.0",
+  "summary": "Will contain summary PLXCoreBluetooth.",
+  "description": "Lorem ipsum",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth",
+  "license": "MIT",
+  "authors": {
+    "Michal Mizera": "axadiw@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*",
+  "resource_bundles": {
+    "PLXCoreBluetooth": [
+      "Pod/Assets/*.png"
+    ]
+  },
+  "frameworks": [
+    "CoreBluetooth",
+    "ReactiveCocoa"
+  ],
+  "dependencies": {
+    "ReactiveCocoa": [
+      "2.5"
+    ]
+  }
+}
