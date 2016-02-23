@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E6052481C7B5D51009ECE92 /* ScanningListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6052471C7B5D51009ECE92 /* ScanningListViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -21,6 +20,8 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		7A187AB655915F5022F852D9 /* ScanningListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1874739F9620A28DF993E6 /* ScanningListViewController.m */; };
+		7A187AC29220FA37F703A72D /* ScanningPeripheralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		E8D64563FFD14D8479437104 /* Pods_PLXCoreBluetooth_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 379BA28261F5D82DBBBE7250 /* Pods_PLXCoreBluetooth_Example.framework */; };
 		FE387783DCF07300C5928462 /* Pods_PLXCoreBluetooth_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EEDC8848AF86E97B70F2BD /* Pods_PLXCoreBluetooth_Tests.framework */; };
@@ -37,8 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E6052461C7B5D51009ECE92 /* ScanningListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningListViewController.h; sourceTree = "<group>"; };
-		0E6052471C7B5D51009ECE92 /* ScanningListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningListViewController.m; sourceTree = "<group>"; };
 		0F7E229656CBC124A6473886 /* Pods-PLXCoreBluetooth_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetooth_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetooth_Tests/Pods-PLXCoreBluetooth_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		1C6F1E8D1B561507D6A97059 /* Pods-PLXCoreBluetooth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetooth_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetooth_Example/Pods-PLXCoreBluetooth_Example.release.xcconfig"; sourceTree = "<group>"; };
 		209ED4151E945A194F728A3C /* Pods-PLXCoreBluetooth_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetooth_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetooth_Tests/Pods-PLXCoreBluetooth_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -63,6 +62,10 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		7A1874739F9620A28DF993E6 /* ScanningListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningListViewController.m; sourceTree = "<group>"; };
+		7A1878C965A2C3A6626E9A4F /* ScanningPeripheralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningPeripheralCell.h; sourceTree = "<group>"; };
+		7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningPeripheralCell.m; sourceTree = "<group>"; };
+		7A187D398C5F2945696EDF65 /* ScanningListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningListViewController.h; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8F4D882B35E74402DAFE76FF /* PLXCoreBluetooth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PLXCoreBluetooth.podspec; path = ../PLXCoreBluetooth.podspec; sourceTree = "<group>"; };
 		A7135B03267130A09E08B290 /* Pods-PLXCoreBluetooth_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetooth_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetooth_Example/Pods-PLXCoreBluetooth_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -153,8 +156,7 @@
 				6003F5A6195388D20070C39A /* MainViewController.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
-				0E6052461C7B5D51009ECE92 /* ScanningListViewController.h */,
-				0E6052471C7B5D51009ECE92 /* ScanningListViewController.m */,
+				7A1878B39BE09A4325917A6A /* Scanning */,
 			);
 			name = "Example for PLXCoreBluetooth";
 			path = PLXCoreBluetooth;
@@ -198,6 +200,17 @@
 				DB2C042C421ABA1750DA818F /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		7A1878B39BE09A4325917A6A /* Scanning */ = {
+			isa = PBXGroup;
+			children = (
+				7A1874739F9620A28DF993E6 /* ScanningListViewController.m */,
+				7A187D398C5F2945696EDF65 /* ScanningListViewController.h */,
+				7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */,
+				7A1878C965A2C3A6626E9A4F /* ScanningPeripheralCell.h */,
+			);
+			path = Scanning;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,7 +420,8 @@
 				6003F59E195388D20070C39A /* PLXAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* MainViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				0E6052481C7B5D51009ECE92 /* ScanningListViewController.m in Sources */,
+				7A187AB655915F5022F852D9 /* ScanningListViewController.m in Sources */,
+				7A187AC29220FA37F703A72D /* ScanningPeripheralCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

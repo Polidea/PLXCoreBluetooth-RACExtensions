@@ -11,10 +11,13 @@
     if ([segue.identifier isEqualToString:@"StartScanningSegue"]) {
         ScanningListViewController *scanningListViewController = segue.destinationViewController;
 
-        scanningListViewController.scanInfiniteDevices = self.scanInfiniteItemsSwitch.isOn;
+        scanningListViewController.shouldScanInfiniteDevices = self.scanInfiniteItemsSwitch.isOn;
         scanningListViewController.scanItemsCount = [self.scanItemsCountTextField.text intValue];
         scanningListViewController.UUIDToScan = self.scanUUIDTextField.text;
     }
+}
+
+- (IBAction)unwindToMain:(UIStoryboardSegue *)unwindSegue {
 }
 
 @end
