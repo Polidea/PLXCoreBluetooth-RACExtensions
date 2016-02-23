@@ -1,8 +1,8 @@
 {
   "name": "PLXCoreBluetooth",
   "version": "0.1.0",
-  "summary": "A short description of PLXCoreBluetooth.",
-  "description": "",
+  "summary": "Will contain summary PLXCoreBluetooth.",
+  "description": "Lorem ipsum",
   "homepage": "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth",
   "license": "MIT",
   "authors": {
@@ -22,6 +22,10 @@
       "Pod/Assets/*.png"
     ]
   },
+  "frameworks": [
+    "CoreBluetooth",
+    "ReactiveCocoa"
+  ],
   "dependencies": {
     "ReactiveCocoa": [
       "2.5"

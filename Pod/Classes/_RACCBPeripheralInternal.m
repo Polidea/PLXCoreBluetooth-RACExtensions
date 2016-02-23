@@ -1,5 +1,6 @@
 #import "_RACCBPeripheralInternal.h"
-#import "RACDelegateProxy.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACDelegateProxy.h>
 
 @interface _RACCBPeripheralInternal ()
 @property(nonatomic, weak, readonly) RACDelegateProxy *proxy;
