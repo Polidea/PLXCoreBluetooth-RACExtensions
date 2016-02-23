@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "RACSignal.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface RACSignal (PLXBluetoothRACUtilities)
 

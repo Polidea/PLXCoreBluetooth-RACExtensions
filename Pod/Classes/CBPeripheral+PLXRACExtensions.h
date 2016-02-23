@@ -1,6 +1,8 @@
 @import Foundation;
 @import CoreBluetooth;
-#import "ReactiveCocoa.h"
+
+@class RACDelegateProxy;
+@class RACSignal;
 
 NS_ASSUME_NONNULL_BEGIN
 

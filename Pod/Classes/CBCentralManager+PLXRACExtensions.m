@@ -1,6 +1,7 @@
-#import <ReactiveCocoa/RACDelegateProxy.h>
 #import <objc/runtime.h>
 #import "CBCentralManager+PLXRACExtensions.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACDelegateProxy.h>
 
 NSInteger PLXCBCentralManagerScanInfiniteCount = -1;
 
@@ -46,13 +47,11 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         __block NSInteger valuesCount = 0;
         RACDisposable *proxyDisposable = [signal subscribeNext:^(CBPeripheral *peripheral) {
             @strongify(self)
-            if (valuesCount++ < count) {
+            if (valuesCount++ < count || count == PLXCBCentralManagerScanInfiniteCount) {
                 [subscriber sendNext:peripheral];
             }
-            if (valuesCount >= count) {
-                if (count != PLXCBCentralManagerScanInfiniteCount) {
-                    [self stopScan];
-                }
+            if (valuesCount >= count && count != PLXCBCentralManagerScanInfiniteCount) {
+                [self stopScan];
                 [proxyDisposable dispose];
                 [subscriber sendCompleted];
             }
@@ -131,7 +130,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         RACDisposable *disposable = [signal subscribeNext:^(id value) {
             if ([value isKindOfClass:[NSError class]]) {
                 [subscriber sendError:value];
-            } else{
+            } else {
                 [subscriber sendNext:value];
                 [subscriber sendCompleted];
             }

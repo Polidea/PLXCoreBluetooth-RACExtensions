@@ -1,10 +1,14 @@
 @import Foundation;
 @import CoreBluetooth;
-#import "ReactiveCocoa.h"
+
+@class RACSignal;
+@class RACDelegateProxy;
 
 extern NSInteger PLXCBCentralManagerScanInfiniteCount;
 
 @interface CBCentralManager (PLXRACExtensions)
+
+NS_ASSUME_NONNULL_BEGIN
 
 /// A delegate proxy which will be set as the receiver's delegate when any of the
 /// methods in this category are used.
@@ -58,4 +62,8 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
  */
 - (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral;
 
+
 @end
+
+
+NS_ASSUME_NONNULL_END

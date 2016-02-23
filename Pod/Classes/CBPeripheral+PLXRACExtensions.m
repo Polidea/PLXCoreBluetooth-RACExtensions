@@ -1,7 +1,8 @@
 #import <objc/runtime.h>
 #import "CBPeripheral+PLXRACExtensions.h"
-#import "RACDelegateProxy.h"
 #import "_RACCBPeripheralInternal.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACDelegateProxy.h>
 #import "RACSignal+PLXBluetoothRACUtilities.h"
 
 @interface CBPeripheral ()
