@@ -36,8 +36,10 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
     return internal;
 }
 
-- (BOOL)_isConnected {
-    return self.state == CBPeripheralStateConnected;
+- (RACSignal *)_plx_performSignalIfConnected:(RACSignal *)signal {
+    return [RACSignal if:[RACSignal return:@(self.state == CBPeripheralStateConnected)]
+                    then:signal
+                    else:[RACSignal error:[NSError plx_peripheraNotConnectedError]]];
 }
 
 - (RACSignal *)rac_name {
@@ -65,10 +67,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverServices:(nullable NSArray<CBUUID *> *)services {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverServices:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, NSError *error) {
@@ -77,19 +76,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *discoverSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self discoverServices:services];
             }]
-            plx_flattenMapNextToErrorIfNeeded]; // TODO: Consider replay here
+            plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:discoverSignal];
 }
 
 - (RACSignal *)rac_readRSSI {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[self._rac_internal.rac_peripheralDidReadRSSI
+    RACSignal *delegateSignal = [[self._rac_internal.rac_peripheralDidReadRSSI
             plx_singleValue]
             reduceEach:^id(CBPeripheral *peripheral, NSNumber *RSSI, NSError *error) {
                 return error ?: RSSI;
@@ -97,19 +94,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *readSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self readRSSI];
             }]
-            plx_flattenMapNextToErrorIfNeeded]; // TODO: Consider replay here
+            plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:readSignal];
 }
 
 - (RACSignal *)rac_discoverIncludedServices:(NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverIncludedServicesForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
@@ -118,19 +113,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *discoverSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self discoverIncludedServices:includedServiceUUIDs forService:service];
             }]
-            plx_flattenMapNextToErrorIfNeeded]; // TODO: Consider replay here
+            plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:discoverSignal];
 }
 
 - (RACSignal *)rac_discoverCharacteristics:(NSArray<CBUUID *> *)characteristicUUIDs forService:(CBService *)service {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverCharacteristicsForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
@@ -139,19 +132,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *discoverSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self discoverCharacteristics:characteristicUUIDs forService:service];
             }]
-            plx_flattenMapNextToErrorIfNeeded]; // TODO: Consider replay here
+            plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:discoverSignal];
 }
 
 - (RACSignal *)rac_readValueForCharacteristic:(CBCharacteristic *)characteristic {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
@@ -160,24 +151,22 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *readSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self readValueForCharacteristic:characteristic];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:readSignal];
 }
 
 - (RACSignal *)rac_writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic writeType:(CBCharacteristicWriteType)writeType {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
     if (writeType == CBCharacteristicWriteWithoutResponse) {
         [self writeValue:data forCharacteristic:characteristic type:writeType];
         return [RACSignal return:@YES];
     }
 
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
@@ -186,19 +175,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *writeSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self writeValue:data forCharacteristic:characteristic type:writeType];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:writeSignal];
 }
 
 - (RACSignal *)rac_discoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverDescriptorsForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
@@ -207,19 +194,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *discoverSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self discoverDescriptorsForCharacteristic:characteristic];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:discoverSignal];
 }
 
 - (RACSignal *)rac_readValueForDescriptor:(CBDescriptor *)descriptor {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
@@ -228,19 +213,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *readSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self readValueForDescriptor:descriptor];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:readSignal];
 }
 
 - (RACSignal *)rac_writeValue:(NSData *)data forDescriptor:(CBDescriptor *)descriptor {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
@@ -249,19 +232,17 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *writeSignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self writeValue:data forDescriptor:descriptor];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:writeSignal];
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled forChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
@@ -270,18 +251,16 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *notifySignal = [[RACSignal
+            plx_createSignalSubscribedTo:delegateSignal withAction:^{
                 @strongify(self)
                 [self setNotifyValue:enabled forCharacteristic:characteristic];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:notifySignal];
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
     RACSignal *updateNotificationStateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
@@ -296,7 +275,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
                 return error ?: _characteristic.value;
             }];
 
-    RACSignal *signal = [RACSignal combineLatest:@[updateNotificationStateSignal, updateValueSignal]
+    RACSignal *combinedSignal = [RACSignal combineLatest:@[updateNotificationStateSignal, updateValueSignal]
                                           reduce:^id(id notificationValue, id characteristicValue) {
                                               if ([notificationValue isKindOfClass:[NSError class]]) {
                                                   return notificationValue;
@@ -306,20 +285,18 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
     RACUseDelegateProxy(self);
     @weakify(self)
-    return [[RACSignal
-            plx_createSignalSubscribedTo:signal withAction:^{
+    RACSignal *notifySignal = [[RACSignal
+            plx_createSignalSubscribedTo:combinedSignal withAction:^{
                 @strongify(self)
                 [self setNotifyValue:enabled forCharacteristic:characteristic];
             }]
             plx_flattenMapNextToErrorIfNeeded];
+    return [self _plx_performSignalIfConnected:notifySignal];
 }
 
 - (RACSignal *)rac_listenForUpdatesForCharacteristic:(CBCharacteristic *)characteristic {
-    if (!self._isConnected) {
-        return [RACSignal error:[NSError plx_peripheraNotConnectedError]];
-    }
     RACUseDelegateProxy(self);
-    return [[[[self.rac_delegateProxy
+    RACSignal *listenSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
@@ -328,6 +305,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
             map:^id(id value) {
                 return [value isKindOfClass:[NSError class]] ? [RACSignal error:value] : [RACSignal return:value];
             }];
+    return [self _plx_performSignalIfConnected:listenSignal];
 }
 
 @end
