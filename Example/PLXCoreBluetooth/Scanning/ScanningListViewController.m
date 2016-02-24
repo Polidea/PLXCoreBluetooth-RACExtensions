@@ -44,7 +44,6 @@
     NSArray *serviceUUIDs = self.UUIDToScan.length != 0 ? @[self.UUIDToScan] : nil;
 
     @weakify(self)
-    RACSignal *isPoweredOnSignal = [self.centralManager rac_isPoweredOn];
     RACSignal *startScanSignal = [[[self.centralManager
             rac_scanForPeripheralsWithServices:serviceUUIDs
                                          count:itemsCount
@@ -63,18 +62,9 @@
                 });
             }];
 
-    RACSignal *stopScanSignal = [RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
-        @strongify(self)
-
-        [self.centralManager stopScan];
-        [subscriber sendNext:@YES];
-        [subscriber sendCompleted];
-        return nil;
-    }];
-
-    [[RACSignal if:isPoweredOnSignal
+    [[RACSignal if:[self.centralManager rac_isPoweredOn]
               then:startScanSignal
-              else:stopScanSignal]
+              else:[self.centralManager rac_stopScan]]
             subscribeError:^(NSError *error) {
                 NSLog(@"error = %@", error);
             }];
