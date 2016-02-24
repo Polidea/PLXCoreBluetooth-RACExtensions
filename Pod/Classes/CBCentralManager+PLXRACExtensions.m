@@ -54,7 +54,8 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     return [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
         __block NSInteger valuesCount = 0;
-        RACDisposable *proxyDisposable = [signal subscribeNext:^(CBPeripheral *peripheral) {
+        __block RACDisposable *proxyDisposable;
+        proxyDisposable = [signal subscribeNext:^(CBPeripheral *peripheral) {
             @strongify(self)
             if (valuesCount++ < count || count == PLXCBCentralManagerScanInfiniteCount) {
                 [subscriber sendNext:peripheral];
@@ -109,7 +110,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     RACSignal *failSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didFailToConnectPeripheral:error:)]
             filter:^BOOL(RACTuple *tuple) {
-                RACTupleUnpack(CBCentralManager *_, CBPeripheral *connectedPeripheral, NSError *__) = tuple;
+                RACTupleUnpack(__unused CBCentralManager *_, CBPeripheral *connectedPeripheral, __unused NSError *__) = tuple;
                 return [connectedPeripheral.identifier isEqual:peripheral.identifier];
             }]
             reduceEach:^id(CBCentralManager *central, CBPeripheral *connectedPeripheral, NSError *error) {
@@ -142,7 +143,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     RACSignal *signal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didDisconnectPeripheral:error:)]
             filter:^BOOL(RACTuple *tuple) {
-                RACTupleUnpack(CBCentralManager *_, CBPeripheral *disconnectedPeripheral, NSError *__) = tuple;
+                RACTupleUnpack(__unused CBCentralManager *_, CBPeripheral *disconnectedPeripheral, __unused NSError *__) = tuple;
                 return [disconnectedPeripheral.identifier isEqual:peripheral.identifier];
             }]
             reduceEach:^id(CBCentralManager *central, CBPeripheral *disconnectedPeripheral, NSError *error) {

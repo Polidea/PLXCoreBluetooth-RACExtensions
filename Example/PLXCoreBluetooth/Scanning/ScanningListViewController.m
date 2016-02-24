@@ -53,7 +53,7 @@
                 return !self.scanningEnabledSwitch.on;
             }]
             doNext:^(RACTuple *tuple) {
-                RACTupleUnpack(CBPeripheral *peripheral, NSDictionary *_, NSNumber *__) = tuple;
+                RACTupleUnpack(CBPeripheral *peripheral, __unused NSDictionary *_, __unused NSNumber *__) = tuple;
                 self.peripheralsDict[peripheral] = tuple;
 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -105,7 +105,7 @@
     @weakify(self)
     UITableViewRowAction *showAdvDictAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Show Adv Details" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath2) {
         @strongify(self)
-        RACTupleUnpack(CBPeripheral *_, NSDictionary *advDataDict, NSNumber *__) = [self peripheralDataForIndexPath:indexPath2];
+        RACTupleUnpack(__unused CBPeripheral *_, NSDictionary *advDataDict, __unused NSNumber *__) = [self peripheralDataForIndexPath:indexPath2];
 
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Adv Data"
                                                                                  message:[NSString stringWithFormat:@"%@", advDataDict]
