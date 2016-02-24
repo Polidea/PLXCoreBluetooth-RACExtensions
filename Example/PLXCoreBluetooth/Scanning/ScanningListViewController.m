@@ -44,28 +44,39 @@
     NSArray *serviceUUIDs = self.UUIDToScan.length != 0 ? @[self.UUIDToScan] : nil;
 
     @weakify(self)
-    [[[self.centralManager rac_isPoweredOn]
-            ignore:@NO]
-            subscribeNext:^(id _) {
+    RACSignal *isPoweredOnSignal = [self.centralManager rac_isPoweredOn];
+    RACSignal *startScanSignal = [[[self.centralManager
+            rac_scanForPeripheralsWithServices:serviceUUIDs
+                                         count:itemsCount
+                                       options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}]
+            filter:^BOOL(id __) {
                 @strongify(self)
-                [[[self.centralManager rac_scanForPeripheralsWithServices:serviceUUIDs
-                                                                    count:itemsCount
-                                                                  options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}]
-                        filter:^BOOL(id __) {
-                            @strongify(self)
-                            return !self.scanningEnabledSwitch.on;
-                        }]
-                        subscribeNext:
-                                ^(RACTuple *tuple) {
-                                    @strongify(self)
-                                    RACTupleUnpack(__block CBPeripheral *peripheral, NSDictionary *_, NSNumber *__) = tuple;
-                                    self.peripheralsDict[peripheral] = tuple;
+                return !self.scanningEnabledSwitch.on;
+            }]
+            doNext:^(RACTuple *tuple) {
+                RACTupleUnpack(CBPeripheral *peripheral, NSDictionary *_, NSNumber *__) = tuple;
+                self.peripheralsDict[peripheral] = tuple;
 
-                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                        @strongify(self)
-                                        [self.tableView reloadData];
-                                    });
-                                }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    @strongify(self)
+                    [self.tableView reloadData];
+                });
+            }];
+
+    RACSignal *stopScanSignal = [RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
+        @strongify(self)
+
+        [self.centralManager stopScan];
+        [subscriber sendNext:@YES];
+        [subscriber sendCompleted];
+        return nil;
+    }];
+
+    [[RACSignal if:isPoweredOnSignal
+              then:startScanSignal
+              else:stopScanSignal]
+            subscribeError:^(NSError *error) {
+                NSLog(@"error = %@", error);
             }];
 }
 
@@ -85,12 +96,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ScanningPeripheralCell *cell = [tableView dequeueReusableCellWithIdentifier:@"peripheralCell"];
-
-    if (!cell) {
-        cell = [[ScanningPeripheralCell alloc] init];
-    }
-
+    ScanningPeripheralCell *cell = [tableView dequeueReusableCellWithIdentifier:@"peripheralCell" forIndexPath:indexPath];
 
     RACTupleUnpack(CBPeripheral *peripheral, NSDictionary *advDataDict, NSNumber *RSSI) = [self peripheralDataForIndexPath:indexPath];
 
