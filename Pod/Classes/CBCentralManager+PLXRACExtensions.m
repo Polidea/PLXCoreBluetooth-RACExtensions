@@ -1,5 +1,6 @@
 #import <objc/runtime.h>
 #import "CBCentralManager+PLXRACExtensions.h"
+#import "NSError+PLXRACExtensions.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoa/RACDelegateProxy.h>
 
@@ -23,6 +24,10 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     return proxy;
 }
 
+- (BOOL)_isPoweredOn {
+    return (CBCentralManagerState) self.state == CBCentralManagerStatePoweredOn;
+}
+
 - (RACSignal *)rac_isPoweredOn {
     return [[RACObserve(self, state)
             map:^NSNumber *(NSNumber *state) {
@@ -32,6 +37,10 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (RACSignal *)rac_scanForPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs count:(NSInteger)count options:(NSDictionary<NSString *, id> *)options {
+    if (!self._isPoweredOn) {
+        return [RACSignal error:[NSError plx_bluetoothOffError]];
+    }
+
     RACSignal *signal = [[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didDiscoverPeripheral:advertisementData:RSSI:)]
             reduceEach:^id(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary<NSString *, id> *advertisementData, NSNumber *RSSI) {
@@ -83,6 +92,10 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (RACSignal *)rac_connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary<NSString *, id> *)options {
+    if (!self._isPoweredOn) {
+        return [RACSignal error:[NSError plx_bluetoothOffError]];
+    }
+
     RACSignal *successSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didConnectPeripheral:)]
             reduceEach:^id(CBCentralManager *central, CBPeripheral *connectedPeripheral) {
@@ -122,6 +135,10 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral {
+    if (!self._isPoweredOn) {
+        return [RACSignal error:[NSError plx_bluetoothOffError]];
+    }
+
     RACSignal *signal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didDisconnectPeripheral:error:)]
             filter:^BOOL(RACTuple *tuple) {

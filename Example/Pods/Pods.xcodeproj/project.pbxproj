@@ -168,11 +168,12 @@
 		7C3E004CCB3CFFFA060EFC56B4AE0D9D /* Pods-PLXCoreBluetooth_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B506E2F9C6C7BF5F2D1519C255CDEFC /* Pods-PLXCoreBluetooth_Tests-dummy.m */; };
 		7C83358CB9A80551975262C0FCB3933D /* NSObject+RACDeallocating.h in Headers */ = {isa = PBXBuildFile; fileRef = D5AD0AE58869B4BF8C57E2D74D515B58 /* NSObject+RACDeallocating.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DBADC6D6A0A9CA34DFDE349F0F99B54 /* SPTExampleGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = DC3322EC5C1022761B9AAC8BDAB61946 /* SPTExampleGroup.m */; };
-		7E92F46B3F345029EFDDBB7F12536949 /* ReplaceMe.m in Sources */ = {isa = PBXBuildFile; fileRef = 13C437CA9E39F040B2CAB007808A717C /* ReplaceMe.m */; };
 		7FC727511A01CC02EE145621A0B2EB7D /* NSData+RACSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 96F490BBF406BB7442F96AE25968295E /* NSData+RACSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		805E425BBEF7A6133E32E1D30A073010 /* EXPExpect.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA60D0438F16D01DA7BD9441A1BB29B /* EXPExpect.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		806EFE1628BCC3B585E16FA3E68479BF /* PLXCoreBluetooth-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 20446992D2688C6978DBAC59082F8D57 /* PLXCoreBluetooth-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80DA4D08F7FFE8E938A25F1BAC815357 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 310DE489E32484A949AF6FB1D031030B /* ReactiveCocoa.framework */; };
+		81086B917066577E65A86DC4 /* NSError+PLXRACExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 810867D9C5DCF4AC982C64DA /* NSError+PLXRACExtensions.m */; };
+		81086D6331780074CC937CCD /* NSError+PLXRACExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 81086404294C5FACAD0F4DBF /* NSError+PLXRACExtensions.h */; };
 		82B904F14EBE04615D0E34A46F5113B7 /* RACScheduler+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = DB86D431E8FF4B22547903C24D572658 /* RACScheduler+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837B593D7C1D01B4EA400247309D6AB0 /* Expecta-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CEECE8F60064543E4AE6E1DE472BB8C /* Expecta-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84F37E4E264AADD9748E34EBE1EDF2C1 /* NSDictionary+RACSequenceAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = A8A81A7CADBED5E36C4CF74E6DFEF1D3 /* NSDictionary+RACSequenceAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -414,7 +415,6 @@
 		11B88AEB1BD5F66E3606024C10D6A0EC /* EXPMatchers+beInTheRangeOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beInTheRangeOf.m"; path = "Expecta/Matchers/EXPMatchers+beInTheRangeOf.m"; sourceTree = "<group>"; };
 		11C7FC95213E6F8FB0ABC8DC79E0AD3F /* ReactiveCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11FCD2FD816A75313E09D0EA537DAA30 /* NSObject+RACKVOWrapper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+RACKVOWrapper.m"; path = "ReactiveCocoa/NSObject+RACKVOWrapper.m"; sourceTree = "<group>"; };
-		13C437CA9E39F040B2CAB007808A717C /* ReplaceMe.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ReplaceMe.m; sourceTree = "<group>"; };
 		146A35D6DAF79C9B7BFAA9BFB4B6BBC6 /* EXPMatchers+beGreaterThanOrEqualTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beGreaterThanOrEqualTo.m"; path = "Expecta/Matchers/EXPMatchers+beGreaterThanOrEqualTo.m"; sourceTree = "<group>"; };
 		14ABE333B0CD2AC62CFAC181CDE90AF7 /* PLXCoreBluetooth-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PLXCoreBluetooth-prefix.pch"; sourceTree = "<group>"; };
 		14D53905F2F7D1F3F75C4318E2CAD82F /* EXPMatchers+endWith.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+endWith.m"; path = "Expecta/Matchers/EXPMatchers+endWith.m"; sourceTree = "<group>"; };
@@ -581,6 +581,8 @@
 		7EA87280DEB898DE20452EC284B0E434 /* UIControl+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIControl+RACSignalSupport.h"; path = "ReactiveCocoa/UIControl+RACSignalSupport.h"; sourceTree = "<group>"; };
 		7F0D2D96E1D98150A9D1F7C57BE3839C /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCompiledExample.m; path = Specta/Specta/SPTCompiledExample.m; sourceTree = "<group>"; };
 		7FAD293BA07C44681D5AA6A72BEE010B /* NSObject+RACDeallocating.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+RACDeallocating.m"; path = "ReactiveCocoa/NSObject+RACDeallocating.m"; sourceTree = "<group>"; };
+		81086404294C5FACAD0F4DBF /* NSError+PLXRACExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PLXRACExtensions.h"; sourceTree = "<group>"; };
+		810867D9C5DCF4AC982C64DA /* NSError+PLXRACExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PLXRACExtensions.m"; sourceTree = "<group>"; };
 		81E530855D77982F8B0205711DDB621C /* MKAnnotationView+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MKAnnotationView+RACSignalSupport.h"; path = "ReactiveCocoa/MKAnnotationView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		8257BEDA8E2EEDFF63D2392ED23FFA60 /* EXPMatchers+beginWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beginWith.h"; path = "Expecta/Matchers/EXPMatchers+beginWith.h"; sourceTree = "<group>"; };
 		82BE8D4F60866A83086E4E325A236163 /* RACImmediateScheduler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACImmediateScheduler.m; path = ReactiveCocoa/RACImmediateScheduler.m; sourceTree = "<group>"; };
@@ -1108,7 +1110,8 @@
 				F83C9D961E5CBFEE7C28A751B61E31B1 /* PLXCoreBluetooth.h */,
 				30D35F42C01E8ED761B798B1FC0D69D3 /* RACSignal+PLXBluetoothRACUtilities.h */,
 				E1DFE4B3A185FAD20B9387721D9DADE7 /* RACSignal+PLXBluetoothRACUtilities.m */,
-				13C437CA9E39F040B2CAB007808A717C /* ReplaceMe.m */,
+				810867D9C5DCF4AC982C64DA /* NSError+PLXRACExtensions.m */,
+				81086404294C5FACAD0F4DBF /* NSError+PLXRACExtensions.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 				806EFE1628BCC3B585E16FA3E68479BF /* PLXCoreBluetooth-umbrella.h in Headers */,
 				2C496952B4F0891512F23E08C07E53EF /* PLXCoreBluetooth.h in Headers */,
 				DADBE001F29D32D3D1A13C6EF4AD07D2 /* RACSignal+PLXBluetoothRACUtilities.h in Headers */,
+				81086D6331780074CC937CCD /* NSError+PLXRACExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1864,7 +1868,7 @@
 				11AFB3DDE6AED95E2625420344986010 /* CBPeripheral+PLXRACExtensions.m in Sources */,
 				E04242FCE661CEBC22275336372AE2DF /* PLXCoreBluetooth-dummy.m in Sources */,
 				B8DC5D3F1ED18BC27B22FEE2EAA67827 /* RACSignal+PLXBluetoothRACUtilities.m in Sources */,
-				7E92F46B3F345029EFDDBB7F12536949 /* ReplaceMe.m in Sources */,
+				81086B917066577E65A86DC4 /* NSError+PLXRACExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
