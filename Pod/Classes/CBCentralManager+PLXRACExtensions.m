@@ -66,10 +66,8 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         [self scanForPeripheralsWithServices:serviceUUIDs options:options];
 
         return [RACDisposable disposableWithBlock:^{
-            if (count != PLXCBCentralManagerScanInfiniteCount) {
-                @strongify(self)
-                [self stopScan];
-            }
+            @strongify(self)
+            [self stopScan];
         }];
     }] setNameWithFormat:@"-rac_scanForPeripheralsWithServices: = %@ count: = %@ options: = %@", serviceUUIDs, @(count), options];
 }
@@ -142,7 +140,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         RACDisposable *disposable = [signal subscribeNext:^(id value) {
             if ([value isKindOfClass:[NSError class]]) {
                 [subscriber sendError:value];
-            } else{
+            } else {
                 [subscriber sendNext:value];
                 [subscriber sendCompleted];
             }
