@@ -10,4 +10,11 @@
     }];
 }
 
++ (instancetype)plx_peripheraNotConnectedError {
+    return [NSError errorWithDomain:@"com.polidea.PLXRACExtensions" code:-1610 userInfo:@{
+            NSLocalizedDescriptionKey : @"Peripheral is not connected",
+            NSLocalizedFailureReasonErrorKey : @"CBPeripheral state is not CBPeripheralStateConnected"
+    }];
+}
+
 @end
