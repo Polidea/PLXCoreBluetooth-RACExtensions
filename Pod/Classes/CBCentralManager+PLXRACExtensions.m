@@ -74,6 +74,17 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     }] setNameWithFormat:@"-rac_scanForPeripheralsWithServices: = %@ count: = %@ options: = %@", serviceUUIDs, @(count), options];
 }
 
+- (RACSignal *)rac_stopScan {
+    @weakify(self)
+    return [RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
+        @strongify(self)
+        [self stopScan];
+        [subscriber sendNext:@YES];
+        [subscriber sendCompleted];
+        return nil;
+    }];
+}
+
 - (RACSignal *)rac_connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary<NSString *, id> *)options {
     RACSignal *successSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didConnectPeripheral:)]

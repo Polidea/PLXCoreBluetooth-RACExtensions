@@ -8,7 +8,7 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
 
 /// A delegate proxy which will be set as the receiver's delegate when any of the
 /// methods in this category are used.
-@property (nonatomic, strong, readonly) RACDelegateProxy *rac_delegateProxy;
+@property(nonatomic, strong, readonly) RACDelegateProxy *rac_delegateProxy;
 
 /*!
  *  @method rac_isPoweredOn
@@ -34,6 +34,15 @@ extern NSInteger PLXCBCentralManagerScanInfiniteCount;
  *  @see                scanForPeripheralsWithServices:options:
  */
 - (RACSignal *)rac_scanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs count:(NSInteger)count options:(nullable NSDictionary<NSString *, id> *)options;
+
+/*!
+ *  @method rac_stopScan:
+ *
+ *  @discussion         Stops scanning for peripherals.
+ *                      This method returns immediately with <code>@YES</code> and completes.
+ *
+ */
+- (RACSignal *)rac_stopScan;
 
 /*!
  *  @method rac_connectPeripheral:options:
