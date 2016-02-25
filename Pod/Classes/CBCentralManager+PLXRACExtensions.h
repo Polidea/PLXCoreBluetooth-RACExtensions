@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CBCentralManager (PLXRACExtensions)
 
 /// If set to YES all methods will wait until central manager is powered on. Default set to NO.
-@property(nonatomic, assign) BOOL shouldWaitUntilPoweredOn;
+@property(nonatomic, assign) BOOL plx_shouldWaitUntilPoweredOn;
 
 /// A delegate proxy which will be set as the receiver's delegate when any of the
 /// methods in this category are used.

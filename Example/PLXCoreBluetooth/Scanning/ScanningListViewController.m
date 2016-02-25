@@ -2,6 +2,7 @@
 #import <objc/objc.h>
 #import "ScanningListViewController.h"
 #import "ScanningPeripheralCell.h"
+#import "PeripheralDetailsViewController.h"
 
 @interface ScanningListViewController ()
 @property(nonatomic, strong) CBCentralManager *centralManager;
@@ -23,28 +24,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self setupBluetoothCentral];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [self startScan];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
-    [self.centralManager stopScan];
+    [self stopScan];
 }
 
 - (void)setupBluetoothCentral {
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil];
-    self.centralManager.shouldWaitUntilPoweredOn = YES;
+    self.centralManager.plx_shouldWaitUntilPoweredOn = YES;
+}
+
+- (void)startScan {
     NSInteger itemsCount = self.shouldScanInfiniteDevices ? PLXCBCentralManagerScanInfiniteCount : self.scanItemsCount;
     NSArray *serviceUUIDs = self.UUIDToScan.length != 0 ? @[self.UUIDToScan] : nil;
 
     @weakify(self)
-    [[[self.centralManager
+    self.scanDisposable = [[[self.centralManager
             rac_scanForPeripheralsWithServices:serviceUUIDs
                                          count:itemsCount
                                        options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}]
@@ -66,6 +74,11 @@
                     }];
 }
 
+- (void)stopScan {
+    [self.scanDisposable dispose];
+    [self.centralManager stopScan];
+}
+
 - (RACTuple *)peripheralDataForIndexPath:(NSIndexPath *)indexPath {
     NSArray *sortedPeripherals = [self.peripheralsDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(CBPeripheral *obj1, CBPeripheral *obj2) {
         return [obj1.identifier.UUIDString compare:obj2.identifier.UUIDString];
@@ -73,6 +86,16 @@
 
     return self.peripheralsDict[sortedPeripherals[(NSUInteger) indexPath.row]];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowPeripheral"]) {
+        CBPeripheral *peripheral = [self peripheralDataForIndexPath:[self.tableView indexPathForCell:sender]].first;
+
+        PeripheralDetailsViewController *peripheralDetailsViewController = segue.destinationViewController;
+        peripheralDetailsViewController.peripheral = peripheral;
+    }
+}
+
 
 #pragma mark - UITableViewDelegate, UITableViewDataSource
 
@@ -88,7 +111,7 @@
 
     cell.advDataLabel.text = [[NSString stringWithFormat:@"%@", advDataDict] stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     cell.RSSILabel.text = [NSString stringWithFormat:@"RSSI: %@", RSSI];
-    cell.nameLabel.text = peripheral.identifier.UUIDString;
+    cell.nameLabel.text = peripheral.name ?: peripheral.identifier.UUIDString;
 
     return cell;
 }

@@ -19,6 +19,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
+		7A1871DEBCEFB83485E95C93 /* PeripheralDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A187919447159E05366AF1A /* PeripheralDetailsViewController.m */; };
 		7A187AB655915F5022F852D9 /* ScanningListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1874739F9620A28DF993E6 /* ScanningListViewController.m */; };
 		7A187AC29220FA37F703A72D /* ScanningPeripheralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
@@ -62,8 +63,10 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		7A1874739F9620A28DF993E6 /* ScanningListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningListViewController.m; sourceTree = "<group>"; };
 		7A1878C965A2C3A6626E9A4F /* ScanningPeripheralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningPeripheralCell.h; sourceTree = "<group>"; };
+		7A187919447159E05366AF1A /* PeripheralDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeripheralDetailsViewController.m; sourceTree = "<group>"; };
 		7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningPeripheralCell.m; sourceTree = "<group>"; };
 		7A187D398C5F2945696EDF65 /* ScanningListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningListViewController.h; sourceTree = "<group>"; };
+		7A187E6347056B80629B195B /* PeripheralDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralDetailsViewController.h; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8F4D882B35E74402DAFE76FF /* PLXCoreBluetooth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PLXCoreBluetooth.podspec; path = ../PLXCoreBluetooth.podspec; sourceTree = "<group>"; };
 		A7135B03267130A09E08B290 /* Pods-PLXCoreBluetooth_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLXCoreBluetooth_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PLXCoreBluetooth_Example/Pods-PLXCoreBluetooth_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -155,6 +158,7 @@
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				7A1878B39BE09A4325917A6A /* Scanning */,
+				7A1879106804DCF0FC8C264B /* PeripheralDetails */,
 			);
 			name = "Example for PLXCoreBluetooth";
 			path = PLXCoreBluetooth;
@@ -208,6 +212,15 @@
 				7A1878C965A2C3A6626E9A4F /* ScanningPeripheralCell.h */,
 			);
 			path = Scanning;
+			sourceTree = "<group>";
+		};
+		7A1879106804DCF0FC8C264B /* PeripheralDetails */ = {
+			isa = PBXGroup;
+			children = (
+				7A187919447159E05366AF1A /* PeripheralDetailsViewController.m */,
+				7A187E6347056B80629B195B /* PeripheralDetailsViewController.h */,
+			);
+			path = PeripheralDetails;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,6 +432,7 @@
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				7A187AB655915F5022F852D9 /* ScanningListViewController.m in Sources */,
 				7A187AC29220FA37F703A72D /* ScanningPeripheralCell.m in Sources */,
+				7A1871DEBCEFB83485E95C93 /* PeripheralDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +560,10 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Wno-gnu-conditional-omitted-operand",
+					"-Wno-gnu-statement-expression",
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -564,6 +582,10 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Wno-gnu-conditional-omitted-operand",
+					"-Wno-gnu-statement-expression",
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

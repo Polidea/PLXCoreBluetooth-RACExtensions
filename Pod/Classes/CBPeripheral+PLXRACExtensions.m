@@ -36,16 +36,16 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
     return internal;
 }
 
-- (BOOL)shouldWaitUntilConnected {
-    NSNumber *object = objc_getAssociatedObject(self, @selector(shouldWaitUntilConnected));
+- (BOOL)plx_shouldWaitUntilConnected {
+    NSNumber *object = objc_getAssociatedObject(self, @selector(plx_shouldWaitUntilConnected));
     if (!object) {
-        self.shouldWaitUntilConnected = NO;
+        self.plx_shouldWaitUntilConnected = NO;
     }
     return [object boolValue];
 }
 
-- (void)setShouldWaitUntilConnected:(BOOL)shouldWaitUntilConnected {
-    objc_setAssociatedObject(self, @selector(shouldWaitUntilConnected), @(shouldWaitUntilConnected), OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setPlx_shouldWaitUntilConnected:(BOOL)plx_shouldWaitUntilConnected {
+    objc_setAssociatedObject(self, @selector(plx_shouldWaitUntilConnected), @(plx_shouldWaitUntilConnected), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (RACSignal *)_plx_performSignalIfConnected:(RACSignal *)signal {
@@ -64,7 +64,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
                 return defaultBehaviorSignal;
             }];
 
-    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilConnected)]
+    return [RACSignal if:[RACSignal return:@(self.plx_shouldWaitUntilConnected)]
                     then:waitUntinConnectedSignal
                     else:defaultBehaviorSignal];
 }

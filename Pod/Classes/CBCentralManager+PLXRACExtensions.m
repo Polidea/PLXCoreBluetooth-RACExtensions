@@ -15,16 +15,16 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     self.delegate = (id) self.rac_delegateProxy;
 }
 
-- (BOOL)shouldWaitUntilPoweredOn {
-    NSNumber *object = objc_getAssociatedObject(self, @selector(shouldWaitUntilPoweredOn));
+- (BOOL)plx_shouldWaitUntilPoweredOn {
+    NSNumber *object = objc_getAssociatedObject(self, @selector(plx_shouldWaitUntilPoweredOn));
     if (!object) {
-        self.shouldWaitUntilPoweredOn = NO;
+        self.plx_shouldWaitUntilPoweredOn = NO;
     }
     return [object boolValue];
 }
 
-- (void)setShouldWaitUntilPoweredOn:(BOOL)shouldWaitUntilPoweredOn {
-    objc_setAssociatedObject(self, @selector(shouldWaitUntilPoweredOn), @(shouldWaitUntilPoweredOn), OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setPlx_shouldWaitUntilPoweredOn:(BOOL)plx_shouldWaitUntilPoweredOn {
+    objc_setAssociatedObject(self, @selector(plx_shouldWaitUntilPoweredOn), @(plx_shouldWaitUntilPoweredOn), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (RACDelegateProxy *)rac_delegateProxy {
@@ -48,7 +48,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
             flattenMap:^RACSignal *(id _) {
                 return signal;
             }];
-    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilPoweredOn)]
+    return [RACSignal if:[RACSignal return:@(self.plx_shouldWaitUntilPoweredOn)]
                     then:waitUntilReadySignal
                     else:signal];
 }
@@ -76,7 +76,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     @weakify(self)
     RACSignal *scanSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn && !self.shouldWaitUntilPoweredOn) {
+        if (!self._isPoweredOn && !self.plx_shouldWaitUntilPoweredOn) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
@@ -149,7 +149,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     @weakify(self)
     RACSignal *connectSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn && !self.shouldWaitUntilPoweredOn) {
+        if (!self._isPoweredOn && !self.plx_shouldWaitUntilPoweredOn) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
@@ -183,7 +183,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     @weakify(self)
     RACSignal *disconnectSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn && !self.shouldWaitUntilPoweredOn) {
+        if (!self._isPoweredOn && !self.plx_shouldWaitUntilPoweredOn) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }

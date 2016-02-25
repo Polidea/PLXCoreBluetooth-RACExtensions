@@ -9,4 +9,5 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISwitch *scanningEnabledSwitch;
 
+@property(nonatomic, strong) RACDisposable *scanDisposable;
 @end

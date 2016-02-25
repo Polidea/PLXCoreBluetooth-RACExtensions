@@ -9,7 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CBPeripheral (PLXRACExtensions)
 
 /// If set to YES all methods will wait until peripheral is connected. Default set to NO.
-@property(nonatomic, assign) BOOL shouldWaitUntilConnected;
+@property(nonatomic, assign) BOOL plx_shouldWaitUntilConnected;
 
 /// A delegate proxy which will be set as the receiver's delegate when any of the
 /// methods in this category are used.
