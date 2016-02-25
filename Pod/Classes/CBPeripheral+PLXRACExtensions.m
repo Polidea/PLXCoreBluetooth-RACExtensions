@@ -36,10 +36,37 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
     return internal;
 }
 
+- (BOOL)shouldWaitUntilConnected {
+    NSNumber *object = objc_getAssociatedObject(self, _cmd);
+    if (!object) {
+        self.shouldWaitUntilConnected = NO;
+    }
+    return [object boolValue];
+}
+
+- (void)setShouldWaitUntilConnected:(BOOL)shouldWaitUntilConnected {
+    objc_setAssociatedObject(self, _cmd, @(shouldWaitUntilConnected), OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
 - (RACSignal *)_plx_performSignalIfConnected:(RACSignal *)signal {
-    return [RACSignal if:[RACSignal return:@(self.state == CBPeripheralStateConnected)]
-                    then:signal
-                    else:[RACSignal error:[NSError plx_peripheraNotConnectedError]]];
+    RACSignal *defaultBehaviorSignal = [RACSignal if:[RACSignal return:@(self.state == CBPeripheralStateConnected)]
+                                                then:signal
+                                                else:[RACSignal error:[NSError plx_peripheraNotConnectedError]]];
+
+    RACSignal *waitUntinConnectedSignal = [[[[[RACObserve(self, state)
+            map:^NSNumber *(NSNumber *state) {
+                return @(self.state == CBPeripheralStateConnected);
+            }]
+            distinctUntilChanged]
+            ignore:@NO]
+            plx_singleValue]
+            flattenMap:^RACSignal *(id _) {
+                return defaultBehaviorSignal;
+            }];
+
+    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilConnected)]
+                    then:waitUntinConnectedSignal
+                    else:defaultBehaviorSignal];
 }
 
 - (RACSignal *)rac_name {
@@ -276,12 +303,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
             }];
 
     RACSignal *combinedSignal = [RACSignal combineLatest:@[updateNotificationStateSignal, updateValueSignal]
-                                          reduce:^id(id notificationValue, id characteristicValue) {
-                                              if ([notificationValue isKindOfClass:[NSError class]]) {
-                                                  return notificationValue;
-                                              }
-                                              return updateValueSignal;
-                                          }];
+                                                  reduce:^id(id notificationValue, id characteristicValue) {
+                                                      if ([notificationValue isKindOfClass:[NSError class]]) {
+                                                          return notificationValue;
+                                                      }
+                                                      return updateValueSignal;
+                                                  }];
 
     RACUseDelegateProxy(self);
     @weakify(self)
