@@ -37,7 +37,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (BOOL)shouldWaitUntilConnected {
-    NSNumber *object = objc_getAssociatedObject(self, _cmd);
+    NSNumber *object = objc_getAssociatedObject(self, @selector(shouldWaitUntilConnected));
     if (!object) {
         self.shouldWaitUntilConnected = NO;
     }
@@ -45,7 +45,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (void)setShouldWaitUntilConnected:(BOOL)shouldWaitUntilConnected {
-    objc_setAssociatedObject(self, _cmd, @(shouldWaitUntilConnected), OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(shouldWaitUntilConnected), @(shouldWaitUntilConnected), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (RACSignal *)_plx_performSignalIfConnected:(RACSignal *)signal {

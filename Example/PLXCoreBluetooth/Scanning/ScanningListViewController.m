@@ -37,14 +37,14 @@
     [self.centralManager stopScan];
 }
 
-
 - (void)setupBluetoothCentral {
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil];
+    self.centralManager.shouldWaitUntilPoweredOn = YES;
     NSInteger itemsCount = self.shouldScanInfiniteDevices ? PLXCBCentralManagerScanInfiniteCount : self.scanItemsCount;
     NSArray *serviceUUIDs = self.UUIDToScan.length != 0 ? @[self.UUIDToScan] : nil;
 
     @weakify(self)
-    RACSignal *startScanSignal = [[[self.centralManager
+    [[[self.centralManager
             rac_scanForPeripheralsWithServices:serviceUUIDs
                                          count:itemsCount
                                        options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}]
@@ -52,22 +52,18 @@
                 @strongify(self)
                 return !self.scanningEnabledSwitch.on;
             }]
-            doNext:^(RACTuple *tuple) {
-                RACTupleUnpack(CBPeripheral *peripheral, __unused NSDictionary *_, __unused NSNumber *__) = tuple;
-                self.peripheralsDict[peripheral] = tuple;
+            subscribeNext:^(RACTuple *tuple) {
+                @strongify(self)
+                self.peripheralsDict[tuple.first] = tuple;
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     @strongify(self)
                     [self.tableView reloadData];
                 });
-            }];
-
-    [[RACSignal if:[self.centralManager rac_isPoweredOn]
-              then:startScanSignal
-              else:[self.centralManager rac_stopScan]]
-            subscribeError:^(NSError *error) {
-                NSLog(@"error = %@", error);
-            }];
+            }
+                    error:^(NSError *error) {
+                        NSLog(@"scan error = %@", error);
+                    }];
 }
 
 - (RACTuple *)peripheralDataForIndexPath:(NSIndexPath *)indexPath {
@@ -105,8 +101,7 @@
     @weakify(self)
     UITableViewRowAction *showAdvDictAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Show Adv Details" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath2) {
         @strongify(self)
-        RACTupleUnpack(__unused CBPeripheral *_, NSDictionary *advDataDict, __unused NSNumber *__) = [self peripheralDataForIndexPath:indexPath2];
-
+        NSDictionary *advDataDict = [self peripheralDataForIndexPath:indexPath2].second;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Adv Data"
                                                                                  message:[NSString stringWithFormat:@"%@", advDataDict]
                                                                           preferredStyle:UIAlertControllerStyleAlert];

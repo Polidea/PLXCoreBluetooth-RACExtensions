@@ -16,7 +16,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (BOOL)shouldWaitUntilPoweredOn {
-    NSNumber *object = objc_getAssociatedObject(self, _cmd);
+    NSNumber *object = objc_getAssociatedObject(self, @selector(shouldWaitUntilPoweredOn));
     if (!object) {
         self.shouldWaitUntilPoweredOn = NO;
     }
@@ -24,7 +24,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (void)setShouldWaitUntilPoweredOn:(BOOL)shouldWaitUntilPoweredOn {
-    objc_setAssociatedObject(self, _cmd, @(shouldWaitUntilPoweredOn), OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(shouldWaitUntilPoweredOn), @(shouldWaitUntilPoweredOn), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (RACDelegateProxy *)rac_delegateProxy {
