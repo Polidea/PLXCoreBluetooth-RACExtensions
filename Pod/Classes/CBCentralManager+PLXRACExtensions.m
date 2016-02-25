@@ -40,6 +40,19 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     return (CBCentralManagerState) self.state == CBCentralManagerStatePoweredOn;
 }
 
+- (RACSignal *)_plx_performSignalIfReady:(RACSignal *)signal {
+    RACSignal *waitUntilReadySignal = [[[[self
+            rac_isPoweredOn]
+            ignore:@NO]
+            plx_singleValue]
+            flattenMap:^RACSignal *(id _) {
+                return signal;
+            }];
+    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
+                    then:waitUntilReadySignal
+                    else:signal];
+}
+
 - (RACSignal *)rac_isPoweredOn {
     @weakify(self)
     return [[RACObserve(self, state)
@@ -95,11 +108,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         }];
     }] setNameWithFormat:@"-rac_scanForPeripheralsWithServices: = %@ count: = %@ options: = %@", serviceUUIDs, @(count), options];
 
-    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
-                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
-                        return scanSignal;
-                    }]
-                    else:scanSignal];
+    return [self _plx_performSignalIfReady:scanSignal];
 }
 
 - (RACSignal *)rac_stopScan {
@@ -155,12 +164,8 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         [self connectPeripheral:peripheral options:options];
         return [RACCompoundDisposable compoundDisposableWithDisposables:@[successDisposable, failDisposable]];
     }] setNameWithFormat:@"-rac_connectPeripheral: = %@ options: = %@", peripheral, options];
-    
-    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
-                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
-                        return connectSignal;
-                    }]
-                    else:connectSignal];
+
+    return [self _plx_performSignalIfReady:connectSignal];
 }
 
 - (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral {
@@ -178,7 +183,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     @weakify(self)
     RACSignal *disconnectSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn) {
+        if (!self._isPoweredOn && !self.shouldWaitUntilReady) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
@@ -194,11 +199,7 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         return disposable;
     }] setNameWithFormat:@"-rac_disconnectPeripheralConnection: = %@", peripheral];
 
-    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
-                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
-                        return disconnectSignal;
-                    }]
-                    else:disconnectSignal];
+    return [self _plx_performSignalIfReady:disconnectSignal];
 }
 
 @end
