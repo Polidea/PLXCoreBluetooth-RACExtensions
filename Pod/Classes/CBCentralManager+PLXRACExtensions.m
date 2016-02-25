@@ -1,7 +1,7 @@
 #import <objc/runtime.h>
 #import "CBCentralManager+PLXRACExtensions.h"
 #import "NSError+PLXRACExtensions.h"
-#import <ReactiveCocoa/ReactiveCocoa.h>
+#import "RACSignal+PLXBluetoothRACUtilities.h"
 #import <ReactiveCocoa/RACDelegateProxy.h>
 
 NSInteger PLXCBCentralManagerScanInfiniteCount = -1;
@@ -13,6 +13,18 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 
     self.rac_delegateProxy.rac_proxiedDelegate = self.delegate;
     self.delegate = (id) self.rac_delegateProxy;
+}
+
+- (BOOL)shouldWaitUntilReady {
+    NSNumber *object = objc_getAssociatedObject(self, _cmd);
+    if (!object) {
+        self.shouldWaitUntilReady = NO;
+    }
+    return [object boolValue];
+}
+
+- (void)setShouldWaitUntilReady:(BOOL)shouldWaitUntilReady {
+    objc_setAssociatedObject(self, _cmd, @(shouldWaitUntilReady), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (RACDelegateProxy *)rac_delegateProxy {
@@ -29,15 +41,17 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
 }
 
 - (RACSignal *)rac_isPoweredOn {
+    @weakify(self)
     return [[RACObserve(self, state)
             map:^NSNumber *(NSNumber *state) {
-                return @((CBCentralManagerState) state.integerValue == CBCentralManagerStatePoweredOn);
+                @strongify(self)
+                return @([self _isPoweredOn]);
             }]
             distinctUntilChanged];
 }
 
 - (RACSignal *)rac_scanForPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs count:(NSInteger)count options:(NSDictionary<NSString *, id> *)options {
-    RACSignal *signal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didDiscoverPeripheral:advertisementData:RSSI:)]
             reduceEach:^id(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary<NSString *, id> *advertisementData, NSNumber *RSSI) {
                 return RACTuplePack(peripheral, advertisementData, RSSI);
@@ -47,16 +61,16 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     RACUseDelegateProxy(self);
 
     @weakify(self)
-    return [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
+    RACSignal *scanSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn) {
+        if (!self._isPoweredOn && !self.shouldWaitUntilReady) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
 
         __block NSInteger valuesCount = 0;
         __block RACDisposable *proxyDisposable;
-        proxyDisposable = [signal subscribeNext:^(CBPeripheral *peripheral) {
+        proxyDisposable = [delegateSignal subscribeNext:^(CBPeripheral *peripheral) {
             @strongify(self)
             if (valuesCount++ < count || count == PLXCBCentralManagerScanInfiniteCount) {
                 [subscriber sendNext:peripheral];
@@ -66,9 +80,9 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
                 [proxyDisposable dispose];
                 [subscriber sendCompleted];
             }
-        }                                 error:^(NSError *error) {
+        }                                         error:^(NSError *error) {
             [subscriber sendError:error];
-        }                             completed:^{
+        }                                     completed:^{
             @strongify(self)
             [self stopScan];
         }];
@@ -80,6 +94,12 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
             [self stopScan];
         }];
     }] setNameWithFormat:@"-rac_scanForPeripheralsWithServices: = %@ count: = %@ options: = %@", serviceUUIDs, @(count), options];
+
+    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
+                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
+                        return scanSignal;
+                    }]
+                    else:scanSignal];
 }
 
 - (RACSignal *)rac_stopScan {
@@ -118,9 +138,9 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     RACUseDelegateProxy(self);
 
     @weakify(self)
-    return [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
+    RACSignal *connectSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
-        if (!self._isPoweredOn) {
+        if (!self._isPoweredOn && !self.shouldWaitUntilReady) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
@@ -135,10 +155,16 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         [self connectPeripheral:peripheral options:options];
         return [RACCompoundDisposable compoundDisposableWithDisposables:@[successDisposable, failDisposable]];
     }] setNameWithFormat:@"-rac_connectPeripheral: = %@ options: = %@", peripheral, options];
+    
+    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
+                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
+                        return connectSignal;
+                    }]
+                    else:connectSignal];
 }
 
 - (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral {
-    RACSignal *signal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(centralManager:didDisconnectPeripheral:error:)]
             filter:^BOOL(RACTuple *tuple) {
                 RACTupleUnpack(__unused CBCentralManager *_, CBPeripheral *disconnectedPeripheral, __unused NSError *__) = tuple;
@@ -150,13 +176,13 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
             takeUntil:self.rac_willDeallocSignal];
 
     @weakify(self)
-    return [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
+    RACSignal *disconnectSignal = [[RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
         @strongify(self)
         if (!self._isPoweredOn) {
             [subscriber sendError:[NSError plx_bluetoothOffError]];
             return nil;
         }
-        RACDisposable *disposable = [signal subscribeNext:^(id value) {
+        RACDisposable *disposable = [delegateSignal subscribeNext:^(id value) {
             if ([value isKindOfClass:[NSError class]]) {
                 [subscriber sendError:value];
             } else {
@@ -167,6 +193,12 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
         [self cancelPeripheralConnection:peripheral];
         return disposable;
     }] setNameWithFormat:@"-rac_disconnectPeripheralConnection: = %@", peripheral];
+
+    return [RACSignal if:[RACSignal return:@(self.shouldWaitUntilReady)]
+                    then:[[[[self rac_isPoweredOn] ignore:@NO] plx_singleValue] flattenMap:^RACSignal *(id _) {
+                        return disconnectSignal;
+                    }]
+                    else:disconnectSignal];
 }
 
 @end

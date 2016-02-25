@@ -6,9 +6,12 @@
 
 extern NSInteger PLXCBCentralManagerScanInfiniteCount;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CBCentralManager (PLXRACExtensions)
 
-NS_ASSUME_NONNULL_BEGIN
+/// If set to YES all methods will wait until central manager is powered on. Default set to NO.
+@property(nonatomic, assign) BOOL shouldWaitUntilReady;
 
 /// A delegate proxy which will be set as the receiver's delegate when any of the
 /// methods in this category are used.
@@ -73,6 +76,5 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @end
-
 
 NS_ASSUME_NONNULL_END
