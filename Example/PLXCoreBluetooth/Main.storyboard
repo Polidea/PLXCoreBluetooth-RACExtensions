@@ -85,9 +85,7 @@
                             <constraint firstItem="ORP-h4-RpK" firstAttribute="top" secondItem="TpU-gO-2f1" secondAttribute="top" constant="100" id="sX9-57-2aT"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="PLXCoreBluetooth" id="uYQ-S7-hpY">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="yi1-ze-nMu"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="PLXCoreBluetooth" id="uYQ-S7-hpY"/>
                     <connections>
                         <outlet property="scanInfiniteItemsSwitch" destination="7jk-KW-UOs" id="mKk-9B-QVB"/>
                         <outlet property="scanItemsCountTextField" destination="8RD-LM-FH4" id="2pf-Io-AQG"/>
@@ -101,7 +99,7 @@
         <!--Scanning details-->
         <scene sceneID="wn4-3S-ibx">
             <objects>
-                <viewController title="Scanning details" id="FoO-aU-dQc" customClass="ScanningListViewController" sceneMemberID="viewController">
+                <viewController title="Scanning details" automaticallyAdjustsScrollViewInsets="NO" id="FoO-aU-dQc" customClass="ScanningListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LGj-hx-D7O"/>
                         <viewControllerLayoutGuide type="bottom" id="do7-vr-6kU"/>
@@ -114,8 +112,8 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="peripheralCell" id="v4i-DU-Eus" customClass="ScanningPeripheralCell">
-                                        <rect key="frame" x="0.0" y="65" width="600" height="88"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="peripheralCell" id="v4i-DU-Eus" customClass="ScanningPeripheralCell">
+                                        <rect key="frame" x="0.0" y="1" width="600" height="88"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="v4i-DU-Eus" id="PfD-Ly-NYF">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="87.5"/>
@@ -182,7 +180,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </switch>
                             </barButtonItem>
-                            <barButtonItem title="Pause" style="done" id="v2p-lK-ubY"/>
+                            <barButtonItem enabled="NO" title="Pause" style="done" id="v2p-lK-ubY"/>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
