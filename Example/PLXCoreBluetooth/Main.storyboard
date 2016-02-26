@@ -305,7 +305,7 @@
                                             <outlet property="includedServicesCountLabel" destination="ibB-Ef-uBw" id="NWp-wm-e6v"/>
                                             <outlet property="isPrimaryLabel" destination="Z8t-SH-ncn" id="MJm-fN-PFO"/>
                                             <outlet property="uuidLabel" destination="zwQ-Tk-kJd" id="Fne-jq-8jz"/>
-                                            <segue destination="vt8-s2-bYE" kind="show" id="xm2-PZ-2BZ"/>
+                                            <segue destination="vt8-s2-bYE" kind="show" identifier="showService" id="xm2-PZ-2BZ"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -334,6 +334,7 @@
                         <outlet property="nameLabel" destination="Yby-ir-o1G" id="NnK-uU-V54"/>
                         <outlet property="rssiLabel" destination="cPs-iF-IOo" id="ADp-Zw-hf4"/>
                         <outlet property="statusLabel" destination="TlG-Fe-bdI" id="pQf-ld-Zjz"/>
+                        <outlet property="tableView" destination="2np-5Q-AcK" id="fMz-DA-Ksz"/>
                         <outlet property="uuidLabel" destination="pGw-vf-ois" id="wdP-Gd-Tuq"/>
                     </connections>
                 </viewController>
@@ -455,7 +456,7 @@
                                             <outlet property="includedServicesCountLabel" destination="ibB-PQ-CzU" id="Xks-0D-GGe"/>
                                             <outlet property="isPrimaryLabel" destination="POK-kk-UCn" id="bmu-XU-h2j"/>
                                             <outlet property="uuidLabel" destination="hGp-Km-J8s" id="W0c-ef-yST"/>
-                                            <segue destination="vt8-s2-bYE" kind="show" id="rH8-pw-53l"/>
+                                            <segue destination="vt8-s2-bYE" kind="show" identifier="showService" id="rH8-pw-53l"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="characteristicsHeader" id="FeB-A8-YS9">
@@ -554,7 +555,7 @@
                                             <outlet property="propertiesLabel" destination="iJv-bR-1gR" id="8gI-da-wSn"/>
                                             <outlet property="uuidLabel" destination="B0I-5P-x3S" id="7fJ-2L-Y3o"/>
                                             <outlet property="valueLabel" destination="dhi-hS-8BI" id="GaK-Of-SfB"/>
-                                            <segue destination="koF-WI-w6w" kind="show" id="2Zv-JE-4um"/>
+                                            <segue destination="koF-WI-w6w" kind="show" identifier="showCharacteristic" id="2Zv-JE-4um"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -573,6 +574,7 @@
                     </view>
                     <connections>
                         <outlet property="isPrimaryLabel" destination="4im-20-82h" id="dFw-AO-4R9"/>
+                        <outlet property="tableView" destination="uDD-1z-fbz" id="0n3-UY-IQu"/>
                         <outlet property="uuidLabel" destination="MwN-BS-cC4" id="9Sj-U6-k9H"/>
                     </connections>
                 </viewController>
@@ -686,6 +688,7 @@
                         <outlet property="characteristicNewValueTextField" destination="RjS-Un-5Me" id="8Px-n8-hF4"/>
                         <outlet property="isNotifyingLabel" destination="lOO-6r-ldZ" id="w2I-hM-C6k"/>
                         <outlet property="propertiesLabel" destination="UXK-7j-bVy" id="ifg-Ev-dXD"/>
+                        <outlet property="tableView" destination="gKA-ra-sUA" id="AhF-3u-QOI"/>
                         <outlet property="uuidLabel" destination="dCI-rs-Dry" id="4Pk-Yk-ggi"/>
                         <outlet property="valueLabel" destination="dCI-rs-Dry" id="0fl-iK-Bwy"/>
                     </connections>

@@ -55,7 +55,7 @@
     self.scanDisposable = [[[self.centralManager
             rac_scanForPeripheralsWithServices:serviceUUIDs
                                          count:itemsCount
-                                       options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}]
+                                       options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
             filter:^BOOL(id __) {
                 @strongify(self)
                 return !self.scanningEnabledSwitch.on;

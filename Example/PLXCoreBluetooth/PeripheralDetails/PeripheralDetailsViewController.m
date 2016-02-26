@@ -1,7 +1,8 @@
 #import <PLXCoreBluetooth/CBPeripheral+PLXRACExtensions.h>
-#import <BlocksKit/BlocksKit+UIKit.h>
 #import <PLXCoreBluetooth/CBCentralManager+PLXRACExtensions.h>
 #import "PeripheralDetailsViewController.h"
+#import "ServiceTableViewCell.h"
+#import "ServiceDetailsViewController.h"
 
 
 @implementation PeripheralDetailsViewController {
@@ -11,7 +12,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = self.peripheral.identifier.UUIDString;
+    self.title = [NSString stringWithFormat:@"Peripheral: %@", self.peripheral.identifier.UUIDString];
     self.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", self.peripheral.identifier.UUIDString];
 
     @weakify(self)
@@ -19,8 +20,9 @@
             deliverOnMainThread]
             subscribeNext:
                     ^(NSString *name) {
+                        NSLog(@"Received name %@", name);
                         @strongify(self)
-                        self.title = name;
+                        self.title = [NSString stringWithFormat:@"Peripheral: %@", name];
                         self.nameLabel.text = [NSString stringWithFormat:@"Name: %@", name];
                     }];
 
@@ -49,7 +51,23 @@
                 self.statusLabel.text = [NSString stringWithFormat:@"State: %@", stateString];
             }];
 
-    [self.centralManager rac_disconnectPeripheralConnection:<#(CBPeripheral *)peripheral#>]
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [self.tableView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"showService"]) {
+        ServiceDetailsViewController *serviceDetailsViewController = segue.destinationViewController;
+
+        CBService *service = self.peripheral.services[(NSUInteger) [self.tableView indexPathForCell:sender].row];
+        serviceDetailsViewController.service = service;
+    }
 }
 
 - (IBAction)actionsButtonTapped:(id)sender {
@@ -72,6 +90,37 @@
                                                                                   NSLog(@"Error while connecting to peripheral %@", error);
                                                                               }];
                                                           }];
+
+
+    UIAlertAction *readRSSIAction = [UIAlertAction actionWithTitle:@"Read RSSI"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction *_) {
+                                                               @strongify(self)
+                                                               [[[self.peripheral rac_readRSSI]
+                                                                       deliverOnMainThread]
+                                                                       subscribeNext:^(NSNumber *RSSI) {
+                                                                           @strongify(self)
+                                                                           NSLog(@"RSSI = %@", RSSI);
+                                                                           self.rssiLabel.text = [NSString stringWithFormat:@"RSSI: %@", RSSI];
+                                                                       }
+                                                                               error:^(NSError *error) {
+                                                                                   NSLog(@"Error while reading RSSI: %@", error);
+                                                                               }];
+                                                           }];
+
+
+    UIAlertAction *discoverServicesAction = [UIAlertAction actionWithTitle:@"Discover services"
+                                                                     style:UIAlertActionStyleDefault
+                                                                   handler:^(UIAlertAction *_) {
+                                                                       @strongify(self)
+                                                                       [[[self.peripheral rac_discoverServices:nil]
+                                                                               deliverOnMainThread]
+                                                                               subscribeNext:
+                                                                                       ^(id __) {
+                                                                                           @strongify(self)
+                                                                                           [self.tableView reloadData];
+                                                                                       }];
+                                                                   }];
     UIAlertAction *disconnectAction = [UIAlertAction actionWithTitle:@"Disconnect"
                                                                style:UIAlertActionStyleDestructive
                                                              handler:^(UIAlertAction *_) {
@@ -85,10 +134,33 @@
                                                                                  }];
                                                              }];
     [alertController addAction:connectAction];
+    [alertController addAction:readRSSIAction];
+    [alertController addAction:discoverServicesAction];
     [alertController addAction:disconnectAction];
 
     alertController.popoverPresentationController.barButtonItem = self.actionsBarButton;
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+#pragma mark - UITableViewDataSource UITableViewDelegate
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.peripheral.services.count;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ServiceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"serviceCell" forIndexPath:indexPath];
+
+    CBService *service = self.peripheral.services[(NSUInteger) indexPath.row];
+
+    cell.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", service.UUID.UUIDString];
+    cell.isPrimaryLabel.text = [NSString stringWithFormat:@"Is Primary: %@", service.isPrimary ? @"YES" : @"NO"];
+    cell.includedServicesCountLabel.text = [NSString stringWithFormat:@"Included services count: %@", @(service.includedServices.count)];
+    cell.characteristicsCountLabel.text = [NSString stringWithFormat:@"Characteristics count: %@", @(service.characteristics.count)];
+
+    return cell;
+}
+
 
 @end
