@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E86E61EEA449E8E9ECF4EE511AEDB8DC"
+               BlueprintIdentifier = "F83E304188485EA341D479644F50BFB8"
                BlueprintName = "PLXCoreBluetooth"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "PLXCoreBluetooth.framework">

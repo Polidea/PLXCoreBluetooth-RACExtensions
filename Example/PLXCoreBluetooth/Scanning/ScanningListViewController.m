@@ -93,6 +93,7 @@
 
         PeripheralDetailsViewController *peripheralDetailsViewController = segue.destinationViewController;
         peripheralDetailsViewController.peripheral = peripheral;
+        peripheralDetailsViewController.centralManager = self.centralManager;
     }
 }
 

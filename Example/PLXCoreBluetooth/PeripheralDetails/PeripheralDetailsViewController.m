@@ -1,4 +1,6 @@
 #import <PLXCoreBluetooth/CBPeripheral+PLXRACExtensions.h>
+#import <BlocksKit/BlocksKit+UIKit.h>
+#import <PLXCoreBluetooth/CBCentralManager+PLXRACExtensions.h>
 #import "PeripheralDetailsViewController.h"
 
 
@@ -46,6 +48,47 @@
                 }
                 self.statusLabel.text = [NSString stringWithFormat:@"State: %@", stateString];
             }];
+
+    [self.centralManager rac_disconnectPeripheralConnection:<#(CBPeripheral *)peripheral#>]
+}
+
+- (IBAction)actionsButtonTapped:(id)sender {
+
+    @weakify(self)
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
+                                                                             message:nil
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *connectAction = [UIAlertAction actionWithTitle:@"Connect"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *_) {
+                                                              @strongify(self)
+
+                                                              [[self.centralManager rac_connectPeripheral:self.peripheral options:nil]
+                                                                      subscribeNext:^(CBPeripheral *peripheral) {
+                                                                          NSLog(@"Connected to %@", peripheral);
+                                                                      }
+                                                                              error:^(NSError *error) {
+                                                                                  NSLog(@"Error while connecting to peripheral %@", error);
+                                                                              }];
+                                                          }];
+    UIAlertAction *disconnectAction = [UIAlertAction actionWithTitle:@"Disconnect"
+                                                               style:UIAlertActionStyleDestructive
+                                                             handler:^(UIAlertAction *_) {
+                                                                 @strongify(self)
+                                                                 [[self.centralManager rac_disconnectPeripheralConnection:self.peripheral]
+                                                                         subscribeNext:^(CBPeripheral *peripheral) {
+                                                                             NSLog(@"Disconnected from %@", peripheral);
+                                                                         }
+                                                                                 error:^(NSError *error) {
+                                                                                     NSLog(@"Error while disconnecting from peripheral %@", error);
+                                                                                 }];
+                                                             }];
+    [alertController addAction:connectAction];
+    [alertController addAction:disconnectAction];
+
+    alertController.popoverPresentationController.barButtonItem = self.actionsBarButton;
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

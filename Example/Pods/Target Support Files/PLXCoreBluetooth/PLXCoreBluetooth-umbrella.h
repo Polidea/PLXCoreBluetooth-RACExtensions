@@ -3,6 +3,7 @@
 #import "_RACCBPeripheralInternal.h"
 #import "CBCentralManager+PLXRACExtensions.h"
 #import "CBPeripheral+PLXRACExtensions.h"
+#import "NSError+PLXRACExtensions.h"
 #import "PLXCoreBluetooth.h"
 #import "RACSignal+PLXBluetoothRACUtilities.h"
 
