@@ -1,14 +1,9 @@
 #import <objc/runtime.h>
 #import "CBPeripheral+PLXRACExtensions.h"
-#import "_RACCBPeripheralInternal.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoa/RACDelegateProxy.h>
 #import "RACSignal+PLXBluetoothRACUtilities.h"
 #import "NSError+PLXRACExtensions.h"
-
-@interface CBPeripheral ()
-@property(nonatomic, strong, readonly) _RACCBPeripheralInternal *_rac_internal;
-@end
 
 @implementation CBPeripheral (PLXRACExtensions)
 
@@ -26,14 +21,6 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
         objc_setAssociatedObject(self, _cmd, proxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return proxy;
-}
-
-- (_RACCBPeripheralInternal *)_rac_internal {
-    _RACCBPeripheralInternal *internal = objc_getAssociatedObject(self, _cmd);
-    if (internal == nil) {
-        internal = [[_RACCBPeripheralInternal alloc] initWithDelegateProxy:self.rac_delegateProxy];
-    }
-    return internal;
 }
 
 - (BOOL)plx_shouldWaitUntilConnected {
@@ -113,8 +100,9 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readRSSI {
-    RACSignal *delegateSignal = [[self._rac_internal.rac_peripheralDidReadRSSI
-            plx_singleValue]
+    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+            signalForSelector:@selector(peripheral:didReadRSSI:error:)]
+            takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, NSNumber *RSSI, NSError *error) {
                 return error ?: RSSI;
             }];
