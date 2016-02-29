@@ -2,6 +2,7 @@
 #import "CBCentralManager+PLXRACExtensions.h"
 #import "NSError+PLXRACExtensions.h"
 #import "RACSignal+PLXBluetoothRACUtilities.h"
+#import "PLXRACDelegateProxy.h"
 #import <ReactiveCocoa/RACDelegateProxy.h>
 
 NSInteger PLXCBCentralManagerScanInfiniteCount = -1;
@@ -27,10 +28,10 @@ static void RACUseDelegateProxy(CBCentralManager *self) {
     objc_setAssociatedObject(self, @selector(plx_shouldWaitUntilPoweredOn), @(plx_shouldWaitUntilPoweredOn), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (RACDelegateProxy *)rac_delegateProxy {
-    RACDelegateProxy *proxy = objc_getAssociatedObject(self, _cmd);
+- (PLXRACDelegateProxy *)rac_delegateProxy {
+    PLXRACDelegateProxy *proxy = objc_getAssociatedObject(self, _cmd);
     if (proxy == nil) {
-        proxy = [[RACDelegateProxy alloc] initWithProtocol:@protocol(CBCentralManagerDelegate)];
+        proxy = [[PLXRACDelegateProxy alloc] initWithProtocol:@protocol(CBCentralManagerDelegate)];
         objc_setAssociatedObject(self, _cmd, proxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return proxy;

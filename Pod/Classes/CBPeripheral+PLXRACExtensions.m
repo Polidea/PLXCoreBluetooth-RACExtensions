@@ -4,6 +4,7 @@
 #import <ReactiveCocoa/RACDelegateProxy.h>
 #import "RACSignal+PLXBluetoothRACUtilities.h"
 #import "NSError+PLXRACExtensions.h"
+#import "PLXRACDelegateProxy.h"
 
 @implementation CBPeripheral (PLXRACExtensions)
 
@@ -14,10 +15,10 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
     self.delegate = (id) self.rac_delegateProxy;
 }
 
-- (RACDelegateProxy *)rac_delegateProxy {
-    RACDelegateProxy *proxy = objc_getAssociatedObject(self, _cmd);
+- (PLXRACDelegateProxy *)rac_delegateProxy {
+    PLXRACDelegateProxy *proxy = objc_getAssociatedObject(self, _cmd);
     if (proxy == nil) {
-        proxy = [[RACDelegateProxy alloc] initWithProtocol:@protocol(CBPeripheralDelegate)];
+        proxy = [[PLXRACDelegateProxy alloc] initWithProtocol:@protocol(CBPeripheralDelegate)];
         objc_setAssociatedObject(self, _cmd, proxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return proxy;
@@ -81,12 +82,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverServices:(nullable NSArray<CBUUID *> *)services {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverServices:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, NSError *error) {
                 return error ?: peripheral.services;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -100,12 +102,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readRSSI {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didReadRSSI:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, NSNumber *RSSI, NSError *error) {
                 return error ?: RSSI;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -119,12 +122,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverIncludedServices:(NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverIncludedServicesForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
                 return error ?: _service.includedServices;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -138,12 +142,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverCharacteristics:(NSArray<CBUUID *> *)characteristicUUIDs forService:(CBService *)service {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverCharacteristicsForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
                 return error ?: _service.characteristics;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -157,12 +162,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readValueForCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.value;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -181,12 +187,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
         return [RACSignal return:@YES];
     }
 
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -200,12 +207,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverDescriptorsForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.descriptors;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -219,12 +227,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readValueForDescriptor:(CBDescriptor *)descriptor {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
                 return error ?: _descriptor.value;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -238,12 +247,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_writeValue:(NSData *)data forDescriptor:(CBDescriptor *)descriptor {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
                 return error ?: @YES;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -257,12 +267,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled forChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
-            }];
+            }]
+            plx_singleValue];
 
     RACUseDelegateProxy(self);
     @weakify(self)
@@ -276,12 +287,13 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *updateNotificationStateSignal = [[[self.rac_delegateProxy
+    RACSignal *updateNotificationStateSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
-            }];
+            }]
+            plx_singleValue];
 
     RACSignal *updateValueSignal = [[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]

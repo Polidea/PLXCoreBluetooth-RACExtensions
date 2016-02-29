@@ -153,6 +153,8 @@
 		773FE9AEA3F68DEC00AB68872FA63BC6 /* ReactiveCocoa-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 96538C86EDAF6F4849F569005A9F925E /* ReactiveCocoa-dummy.m */; };
 		78E7EE9318D8C254B6775E5550C5349B /* Pods-PLXCoreBluetooth_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 281F916FB3491ABC5689392E9754C9A5 /* Pods-PLXCoreBluetooth_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		79558B1F97ABE4AB8942DC18BEBD4B82 /* EXPMatchers+beKindOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4605CFB38B25969320513441D5D9A50C /* EXPMatchers+beKindOf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7A1870C30BF9635A5025F31D /* PLXRACDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1874E761BF690721495086 /* PLXRACDelegateProxy.h */; };
+		7A1872CACFA9F10F7292A182 /* PLXRACDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A187FFA31941B9A39BFCE5E /* PLXRACDelegateProxy.m */; };
 		7AFF4C1D56E749B3B7A03866C3A78D0E /* UICollectionReusableView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D445047DC80342143975DC3C5AAB2F6 /* UICollectionReusableView+RACSignalSupport.m */; };
 		7B223B4E6EF14BA12DA113F7EE10B96C /* NSObject+Expecta.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EA38AD535986354BAE6127E22C7E348 /* NSObject+Expecta.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C3E004CCB3CFFFA060EFC56B4AE0D9D /* Pods-PLXCoreBluetooth_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B506E2F9C6C7BF5F2D1519C255CDEFC /* Pods-PLXCoreBluetooth_Tests-dummy.m */; };
@@ -565,6 +567,8 @@
 		791F2A56739EFD4EA9A0AD9CDE5EB8EC /* EXPMatchers+conformTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+conformTo.m"; path = "Expecta/Matchers/EXPMatchers+conformTo.m"; sourceTree = "<group>"; };
 		7965AB780E21AB2C7F53201234C7252D /* Specta-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Specta-prefix.pch"; sourceTree = "<group>"; };
 		798F40C3B3A99670DA7270E863A94BF0 /* RACCompoundDisposable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACCompoundDisposable.m; path = ReactiveCocoa/RACCompoundDisposable.m; sourceTree = "<group>"; };
+		7A1874E761BF690721495086 /* PLXRACDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLXRACDelegateProxy.h; sourceTree = "<group>"; };
+		7A187FFA31941B9A39BFCE5E /* PLXRACDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLXRACDelegateProxy.m; sourceTree = "<group>"; };
 		7B12AD808E784E0639517713C7BB0806 /* RACReplaySubject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACReplaySubject.h; path = ReactiveCocoa/RACReplaySubject.h; sourceTree = "<group>"; };
 		7B2591CF60DCF202B2FB2A6A7BE25615 /* Pods-PLXCoreBluetooth_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-PLXCoreBluetooth_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7B460C9B68A57CBF1ABED6A1437B6B8A /* RACSequence.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACSequence.m; path = ReactiveCocoa/RACSequence.m; sourceTree = "<group>"; };
@@ -1103,6 +1107,8 @@
 				92DD3A5F66E458FFCFE0E457590E5C4E /* RACSignal+PLXBluetoothRACUtilities.h */,
 				83FB3F6DEA3F5CDB2DE0D03D01602357 /* RACSignal+PLXBluetoothRACUtilities.m */,
 				074AE3D13AB73E7F680C17B6BB147851 /* ReplaceMe.m */,
+				7A187FFA31941B9A39BFCE5E /* PLXRACDelegateProxy.m */,
+				7A1874E761BF690721495086 /* PLXRACDelegateProxy.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1556,6 +1562,7 @@
 				C008D76B48D94D587A4306FC497BE2F4 /* PLXCoreBluetooth-umbrella.h in Headers */,
 				BD05D0646829D2214F598531B6DB1B97 /* PLXCoreBluetooth.h in Headers */,
 				A7DA2B2B9BC6C33C870AB28A85667A36 /* RACSignal+PLXBluetoothRACUtilities.h in Headers */,
+				7A1870C30BF9635A5025F31D /* PLXRACDelegateProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1865,6 +1872,7 @@
 				73539DB8BBB13BFF4BC313BEF3561C2E /* PLXCoreBluetooth-dummy.m in Sources */,
 				5097D2069765E14A567F78A47F0D1755 /* RACSignal+PLXBluetoothRACUtilities.m in Sources */,
 				F09DBAC5B8B917CD23EFB77984CF2A61 /* ReplaceMe.m in Sources */,
+				7A1872CACFA9F10F7292A182 /* PLXRACDelegateProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

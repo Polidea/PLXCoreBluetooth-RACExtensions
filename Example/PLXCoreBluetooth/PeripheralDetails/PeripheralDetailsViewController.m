@@ -117,6 +117,7 @@
                                                                                deliverOnMainThread]
                                                                                subscribeNext:
                                                                                        ^(id __) {
+                                                                                           NSLog(@"Discovered services");
                                                                                            @strongify(self)
                                                                                            [self.tableView reloadData];
                                                                                        }];
