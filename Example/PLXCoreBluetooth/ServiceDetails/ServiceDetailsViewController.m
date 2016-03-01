@@ -15,8 +15,30 @@
     self.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", self.service.UUID.UUIDString];
     self.isPrimaryLabel.text = [NSString stringWithFormat:@"Is Primary: %@", self.service.isPrimary ? @"YES" : @"NO"];
 
+    self.tableView.estimatedRowHeight = 88;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"showService"]) {
+        ServiceDetailsViewController *serviceDetailsViewController = segue.destinationViewController;
+
+        CBService *service = self.service.includedServices[(NSUInteger) [self.tableView indexPathForCell:sender].row];
+        serviceDetailsViewController.service = service;
+    } else if ([segue.identifier isEqualToString:@"showCharacteristic"]) {
+        CharacteristicDetailsViewController *characteristicDetailsViewController = segue.destinationViewController;
+
+        CBCharacteristic *characteristic = self.service.characteristics[(NSUInteger) [self.tableView indexPathForCell:sender].row];
+        characteristicDetailsViewController.characteristic = characteristic;
+        characteristicDetailsViewController.peripheral = self.service.peripheral;
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
     @weakify(self)
     [[[self.service.peripheral rac_discoverIncludedServices:nil forService:self.service]
@@ -43,19 +65,6 @@
                     }];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showService"]) {
-        ServiceDetailsViewController *serviceDetailsViewController = segue.destinationViewController;
-
-        CBService *service = self.service.includedServices[(NSUInteger) [self.tableView indexPathForCell:sender].row];
-        serviceDetailsViewController.service = service;
-    } else if ([segue.identifier isEqualToString:@"showCharacteristic"]) {
-        CharacteristicDetailsViewController *characteristicDetailsViewController = segue.destinationViewController;
-
-        CBCharacteristic *characteristic = self.service.characteristics[(NSUInteger) [self.tableView indexPathForCell:sender].row];
-        characteristicDetailsViewController.characteristic = characteristic;
-    }
-}
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 
@@ -67,7 +76,19 @@
     return 2;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [tableView dequeueReusableCellWithIdentifier:@"servicesHeader"];
+    } else if (section == 1) {
+        return [tableView dequeueReusableCellWithIdentifier:@"characteristicsHeader"];
+    }
+
+    return nil;
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"indexPath = %@", indexPath);
     if (indexPath.section == 0) {
         ServiceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"serviceCell"];
         CBService *service = self.service.includedServices[(NSUInteger) indexPath.row];
@@ -86,6 +107,17 @@
         cell.valueLabel.text = [NSString stringWithFormat:@"Value : %@", characteristic.value];
         cell.propertiesLabel.text = [NSString stringWithFormat:@"Properties : %@", @(characteristic.properties)];
         cell.isNotifyingLabel.text = [NSString stringWithFormat:@"Is Notifying: %@", characteristic.isNotifying ? @"YES" : @"NO"];
+        cell.descriptorsCountLabel.text = [NSString stringWithFormat:@"Descriptors count: %@", @(characteristic.descriptors.count)];
+
+        NSMutableArray *descriptorValues = [NSMutableArray array];
+
+        for (CBDescriptor *cbDescriptor in characteristic.descriptors) {
+            if (cbDescriptor.value) {
+                [descriptorValues addObject:cbDescriptor.value];
+            }
+        }
+
+        cell.descriptorsSummaryLabel.text = [NSString stringWithFormat:@"Descriptors summary: %@", [descriptorValues componentsJoinedByString:@","]];
 
         return cell;
     }

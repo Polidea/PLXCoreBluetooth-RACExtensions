@@ -2,6 +2,9 @@
 
 
 @implementation CharacteristicTableViewCell {
-
+    
 }
+
+
+
 @end

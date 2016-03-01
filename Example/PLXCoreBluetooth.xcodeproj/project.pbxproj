@@ -26,6 +26,7 @@
 		7A187997FC5FE8225F26C8F5 /* ServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1874BC53C3D3BB034ACA6E /* ServiceTableViewCell.m */; };
 		7A187AB655915F5022F852D9 /* ScanningListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1874739F9620A28DF993E6 /* ScanningListViewController.m */; };
 		7A187AC29220FA37F703A72D /* ScanningPeripheralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A187B8054DB596858CBD531 /* ScanningPeripheralCell.m */; };
+		7A187E9B6C06CD7576FA57AF /* DescriptorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A18788170CFB7BCB2D97015 /* DescriptorTableViewCell.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		E8D64563FFD14D8479437104 /* Pods_PLXCoreBluetooth_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 379BA28261F5D82DBBBE7250 /* Pods_PLXCoreBluetooth_Example.framework */; };
 		FE387783DCF07300C5928462 /* Pods_PLXCoreBluetooth_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EEDC8848AF86E97B70F2BD /* Pods_PLXCoreBluetooth_Tests.framework */; };
@@ -71,6 +72,8 @@
 		7A1874739F9620A28DF993E6 /* ScanningListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningListViewController.m; sourceTree = "<group>"; };
 		7A1874BC53C3D3BB034ACA6E /* ServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceTableViewCell.m; sourceTree = "<group>"; };
 		7A18779925F26344EE2F6F51 /* ServiceDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceDetailsViewController.m; sourceTree = "<group>"; };
+		7A18788170CFB7BCB2D97015 /* DescriptorTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DescriptorTableViewCell.m; sourceTree = "<group>"; };
+		7A1878A73CE73D3D0FEC9866 /* DescriptorTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DescriptorTableViewCell.h; sourceTree = "<group>"; };
 		7A1878BDC6098C82EAB2A294 /* ServiceDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceDetailsViewController.h; sourceTree = "<group>"; };
 		7A1878C965A2C3A6626E9A4F /* ScanningPeripheralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningPeripheralCell.h; sourceTree = "<group>"; };
 		7A187919447159E05366AF1A /* PeripheralDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeripheralDetailsViewController.m; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 			children = (
 				7A187A6A1FFB50F69714BA85 /* CharacteristicDetailsViewController.m */,
 				7A187236F198B7D2642ED103 /* CharacteristicDetailsViewController.h */,
+				7A18788170CFB7BCB2D97015 /* DescriptorTableViewCell.m */,
+				7A1878A73CE73D3D0FEC9866 /* DescriptorTableViewCell.h */,
 			);
 			path = CharacteristicDetails;
 			sourceTree = "<group>";
@@ -473,6 +478,7 @@
 				7A1870EC0E7FBDCC8E104C4F /* ServiceDetailsViewController.m in Sources */,
 				7A187997FC5FE8225F26C8F5 /* ServiceTableViewCell.m in Sources */,
 				7A1877EC92BC589220525C4C /* CharacteristicTableViewCell.m in Sources */,
+				7A187E9B6C06CD7576FA57AF /* DescriptorTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
