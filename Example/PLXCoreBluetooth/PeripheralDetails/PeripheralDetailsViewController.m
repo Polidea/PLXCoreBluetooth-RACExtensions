@@ -134,10 +134,16 @@
                                                                                      NSLog(@"Error while disconnecting from peripheral %@", error);
                                                                                  }];
                                                              }];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:nil];
+
     [alertController addAction:connectAction];
     [alertController addAction:readRSSIAction];
     [alertController addAction:discoverServicesAction];
     [alertController addAction:disconnectAction];
+    [alertController addAction:cancelAction];
 
     alertController.popoverPresentationController.barButtonItem = self.actionsBarButton;
     [self presentViewController:alertController animated:YES completion:nil];
