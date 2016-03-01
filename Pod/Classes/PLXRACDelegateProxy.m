@@ -5,20 +5,20 @@
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
     Ivar ivar = class_getInstanceVariable([self class], "_protocol");
-    Protocol *protocol = object_getIvar(self, ivar);
+    Protocol *aProtocol = object_getIvar(self, ivar);
 
-    BOOL containOptionalSelector = [self doesProtocol:protocol containOptionalSelector:aSelector];
-    BOOL containRequiredSelector = [self doesProtocol:protocol containRequiredSelector:aSelector];
+    BOOL containOptionalSelector = [self doesProtocol:aProtocol containsOptionalSelector:aSelector];
+    BOOL containRequiredSelector = [self doesProtocol:aProtocol containsRequiredSelector:aSelector];
     return containOptionalSelector || containRequiredSelector;
 }
 
-- (BOOL)doesProtocol:(Protocol *)protocol containRequiredSelector:(SEL)aSelector {
-    struct objc_method_description optionalMethodDescription = protocol_getMethodDescription(protocol, aSelector, YES, YES);
+- (BOOL)doesProtocol:(Protocol *)aProtocol containsRequiredSelector:(SEL)aSelector {
+    struct objc_method_description optionalMethodDescription = protocol_getMethodDescription(aProtocol, aSelector, YES, YES);
     return optionalMethodDescription.types != NULL;
 }
 
-- (BOOL)doesProtocol:(Protocol *)protocol containOptionalSelector:(SEL)aSelector {
-    struct objc_method_description optionalMethodDescription = protocol_getMethodDescription(protocol, aSelector, NO, YES);
+- (BOOL)doesProtocol:(Protocol *)aProtocol containsOptionalSelector:(SEL)aSelector {
+    struct objc_method_description optionalMethodDescription = protocol_getMethodDescription(aProtocol, aSelector, NO, YES);
     return optionalMethodDescription.types != NULL;
 }
 
