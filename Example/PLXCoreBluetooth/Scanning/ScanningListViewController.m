@@ -1,12 +1,15 @@
 #import <PLXCoreBluetooth/CBCentralManager+PLXRACExtensions.h>
-#import <objc/objc.h>
+#import <Tweaks/FBTweak.h>
+#import <Tweaks/FBTweakInline.h>
 #import "ScanningListViewController.h"
 #import "ScanningPeripheralCell.h"
 #import "PeripheralDetailsViewController.h"
 
+
 @interface ScanningListViewController ()
 @property(nonatomic, strong) CBCentralManager *centralManager;
 @property(nonatomic, strong) NSMutableDictionary<CBPeripheral *, RACTuple *> *peripheralsDict;
+@property(nonatomic, assign) BOOL isScanning;
 
 @end
 
@@ -16,11 +19,11 @@
     self = [super initWithCoder:coder];
     if (self) {
         self.peripheralsDict = [NSMutableDictionary dictionary];
+        self.isScanning = NO;
     }
 
     return self;
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,8 +35,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    [self startScan];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -47,19 +48,27 @@
     self.centralManager.plx_shouldWaitUntilPoweredOn = YES;
 }
 
+- (IBAction)scanButtonTapped:(id)sender {
+    if (!self.isScanning) {
+        [self startScan];
+    } else {
+        [self stopScan];
+    }
+}
+
 - (void)startScan {
-    NSInteger itemsCount = self.shouldScanInfiniteDevices ? PLXCBCentralManagerScanInfiniteCount : self.scanItemsCount;
-    NSArray *serviceUUIDs = self.UUIDToScan.length != 0 ? @[self.UUIDToScan] : nil;
+    NSInteger scanItemsCount = FBTweakValue(@"Scanning", @"Scanning", @"Number of scanned items", 1);
+    BOOL shouldScanInfiniteDevices = FBTweakValue(@"Scanning", @"Scanning", @"Infinite scan items", YES);
+    NSString *UUIDToScan = FBTweakValue(@"Scanning", @"Scanning", @"UUID to scan", @"");
+
+    NSInteger itemsCount = shouldScanInfiniteDevices ? PLXCBCentralManagerScanInfiniteCount : scanItemsCount;
+    NSArray *serviceUUIDs = UUIDToScan.length != 0 ? @[UUIDToScan] : nil;
 
     @weakify(self)
-    self.scanDisposable = [[[self.centralManager
+    self.scanDisposable = [[self.centralManager
             rac_scanForPeripheralsWithServices:serviceUUIDs
                                          count:itemsCount
                                        options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
-            filter:^BOOL(id __) {
-                @strongify(self)
-                return !self.scanningEnabledSwitch.on;
-            }]
             subscribeNext:^(RACTuple *tuple) {
                 @strongify(self)
                 self.peripheralsDict[tuple.first] = tuple;
@@ -72,11 +81,17 @@
                     error:^(NSError *error) {
                         NSLog(@"scan error = %@", error);
                     }];
+
+    self.scanButton.title = @"Stop scanning";
+    self.isScanning = YES;
 }
 
 - (void)stopScan {
     [self.scanDisposable dispose];
     [self.centralManager stopScan];
+
+    self.scanButton.title = @"Start scanning";
+    self.isScanning = NO;
 }
 
 - (RACTuple *)peripheralDataForIndexPath:(NSIndexPath *)indexPath {

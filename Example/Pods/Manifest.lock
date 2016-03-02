@@ -10,22 +10,32 @@ PODS:
   - ReactiveCocoa/UI (2.5):
     - ReactiveCocoa/Core
   - Specta (1.0.5)
+  - Tweaks (2.0.0)
 
 DEPENDENCIES:
   - Expecta
   - PLXCoreBluetooth (from `../`)
   - Specta
+  - Tweaks (from `https://github.com/facebook/Tweaks.git`)
 
 EXTERNAL SOURCES:
   PLXCoreBluetooth:
     :path: ../
+  Tweaks:
+    :git: https://github.com/facebook/Tweaks.git
+
+CHECKOUT OPTIONS:
+  Tweaks:
+    :commit: de1349ffc4c96d25e21f120fe4a54bb198414a14
+    :git: https://github.com/facebook/Tweaks.git
 
 SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   PLXCoreBluetooth: 1d246824705baa72bcf353922b13c5716225fdda
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
+  Tweaks: 524fa47636cce3bf3a4d9156e980f10ae9480e81
 
-PODFILE CHECKSUM: f51d2e120359eda21d3f13c99c5cc3390d30b983
+PODFILE CHECKSUM: 94e9bb1c2bf1b4497e706468554ac5d6b96e9bac
 
 COCOAPODS: 1.0.0.beta.3

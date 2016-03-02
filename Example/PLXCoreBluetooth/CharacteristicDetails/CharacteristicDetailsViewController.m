@@ -44,16 +44,14 @@
                 return [RACSignal zip:readDescriptorValuesSignals];
             }]
             deliverOnMainThread]
-            subscribeNext:
-                    ^(id _) {
-                        NSLog(@"Successfully read all descriptor values");
-                        @strongify(self)
-                        [self.tableView reloadData];
-                    }
-                    error:
-                            ^(NSError *error) {
-                                NSLog(@"Error while reading descriptors= %@", error);
-                            }];
+            subscribeNext:^(id _) {
+                NSLog(@"Successfully read all descriptor values");
+                @strongify(self)
+                [self.tableView reloadData];
+            }
+                    error:^(NSError *error) {
+                        NSLog(@"Error while reading descriptors= %@", error);
+                    }];
 }
 
 #pragma mark - Actions

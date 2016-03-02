@@ -86,8 +86,10 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-PLXCoreBluetooth_Example/PLXCoreBluetooth.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/ReactiveCocoa.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/Tweaks.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-PLXCoreBluetooth_Example/PLXCoreBluetooth.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/ReactiveCocoa.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/Tweaks.framework"
 fi
