@@ -122,9 +122,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverIncludedServices:(NSArray<CBUUID *> *)includedServiceUUIDs forService:(CBService *)service {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverIncludedServicesForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBService *) tuple.second).UUID.UUIDString isEqual:service.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
                 return error ?: _service.includedServices;
             }]
@@ -142,9 +145,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverCharacteristics:(NSArray<CBUUID *> *)characteristicUUIDs forService:(CBService *)service {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverCharacteristicsForService:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBService *) tuple.second).UUID.UUIDString isEqual:service.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBService *_service, NSError *error) {
                 return error ?: _service.characteristics;
             }]
@@ -162,9 +168,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readValueForCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.value;
             }]
@@ -187,9 +196,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
         return [RACSignal return:@YES];
     }
 
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
             }]
@@ -207,9 +219,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_discoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didDiscoverDescriptorsForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.descriptors;
             }]
@@ -227,9 +242,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_readValueForDescriptor:(CBDescriptor *)descriptor {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBDescriptor *) tuple.second).UUID.UUIDString isEqual:descriptor.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
                 return error ?: _descriptor.value;
             }]
@@ -247,9 +265,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_writeValue:(NSData *)data forDescriptor:(CBDescriptor *)descriptor {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didWriteValueForDescriptor:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBDescriptor *) tuple.second).UUID.UUIDString isEqual:descriptor.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBDescriptor *_descriptor, NSError *error) {
                 return error ?: @YES;
             }]
@@ -267,9 +288,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled forChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *delegateSignal = [[[[self.rac_delegateProxy
+    RACSignal *delegateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
             }]
@@ -287,17 +311,23 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)rac_setNotifyValue:(BOOL)enabled andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic {
-    RACSignal *updateNotificationStateSignal = [[[[self.rac_delegateProxy
+    RACSignal *updateNotificationStateSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateNotificationStateForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: @YES;
             }]
             plx_singleValue];
 
-    RACSignal *updateValueSignal = [[[self.rac_delegateProxy
+    RACSignal *updateValueSignal = [[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.value;
             }];
@@ -323,9 +353,12 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 
 - (RACSignal *)rac_listenForUpdatesForCharacteristic:(CBCharacteristic *)characteristic {
     RACUseDelegateProxy(self);
-    RACSignal *listenSignal = [[[[self.rac_delegateProxy
+    RACSignal *listenSignal = [[[[[self.rac_delegateProxy
             signalForSelector:@selector(peripheral:didUpdateValueForCharacteristic:error:)]
             takeUntil:self.rac_willDeallocSignal]
+            filter:^BOOL(RACTuple *tuple) {
+                return [((CBCharacteristic *) tuple.second).UUID.UUIDString isEqual:characteristic.UUID.UUIDString];
+            }]
             reduceEach:^id(CBPeripheral *peripheral, CBCharacteristic *_characteristic, NSError *error) {
                 return error ?: _characteristic.value;
             }]

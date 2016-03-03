@@ -88,7 +88,6 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"indexPath = %@", indexPath);
     if (indexPath.section == 0) {
         ServiceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"serviceCell"];
         CBService *service = self.service.includedServices[(NSUInteger) indexPath.row];
