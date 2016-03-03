@@ -11,6 +11,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISwitch *writeResponseSwitch;
 
+@property (weak, nonatomic) IBOutlet UITextField *valueSizeTextField;
 @property(nonatomic, strong) CBCharacteristic *characteristic;
 @property(nonatomic, strong) CBPeripheral *peripheral;
+
++ (NSString *)characteristicPropertiesString:(CBCharacteristicProperties)properties;
 @end

@@ -5,11 +5,18 @@
 #import <PLXCoreBluetooth/CBCentralManager+PLXRACExtensions.h>
 #import <PLXCoreBluetooth/CBPeripheral+PLXRACExtensions.h>
 
+@interface ServiceDetailsViewController ()
+
+@property(nonatomic, strong) NSMutableDictionary <CBUUID *, RACDisposable *> *listenForCharacteristicsDisposablesDict;
+@end
+
 @implementation ServiceDetailsViewController {
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.listenForCharacteristicsDisposablesDict = [NSMutableDictionary dictionary];
 
     self.title = [NSString stringWithFormat:@"Service: %@", self.service.UUID.UUIDString];
     self.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", self.service.UUID.UUIDString];
@@ -50,18 +57,31 @@
 
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while discovering included services = %@", error);
+                        DDLogError(@"Error while discovering included services = %@", error);
                     }];
 
     [[[self.service.peripheral rac_discoverCharacteristics:nil forService:self.service]
             deliverOnMainThread]
-            subscribeNext:^(id _) {
+            subscribeNext:^(NSArray *characteristics) {
                 @strongify(self)
+
+                for (CBCharacteristic *characteristic in characteristics) {
+                    if (!self.listenForCharacteristicsDisposablesDict[characteristic.UUID]) {
+                        self.listenForCharacteristicsDisposablesDict[characteristic.UUID] =
+                                [[[self.service.peripheral rac_listenForUpdatesForCharacteristic:characteristic]
+                                        deliverOnMainThread]
+                                        subscribeNext:^(id _) {
+                                            DDLogDebug(@"Received new value for characteristic %@", characteristic);
+                                            [self.tableView reloadData];
+                                        }];
+                    }
+                }
+
                 DDLogDebug(@"Discovered characteristics for service %@", self.service);
                 [self.tableView reloadData];
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while discovering characteristics = %@", error);
+                        DDLogError(@"Error while discovering characteristics = %@", error);
                     }];
 }
 
@@ -103,7 +123,7 @@
 
         cell.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", characteristic.UUID.UUIDString];
         cell.valueLabel.text = [NSString stringWithFormat:@"Value : %@", characteristic.value];
-        cell.propertiesLabel.text = [NSString stringWithFormat:@"Properties : %@", @(characteristic.properties)];
+        cell.propertiesLabel.text = [NSString stringWithFormat:@"Properties : %@", [CharacteristicDetailsViewController characteristicPropertiesString:characteristic.properties]];
         cell.isNotifyingLabel.text = [NSString stringWithFormat:@"Is Notifying: %@", characteristic.isNotifying ? @"YES" : @"NO"];
         cell.descriptorsCountLabel.text = [NSString stringWithFormat:@"Descriptors count: %@", @(characteristic.descriptors.count)];
 

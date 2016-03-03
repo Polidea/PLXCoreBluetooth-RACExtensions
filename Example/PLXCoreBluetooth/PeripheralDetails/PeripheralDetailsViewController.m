@@ -140,7 +140,7 @@
                 }
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while connecting to peripheral %@", error);
+                        DDLogError(@"Error while connecting to peripheral %@", error);
                     }];
 }
 
@@ -154,7 +154,7 @@
                 self.rssiLabel.text = [NSString stringWithFormat:@"RSSI: %@", RSSI];
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while reading RSSI: %@", error);
+                        DDLogError(@"Error while reading RSSI: %@", error);
                     }];
 }
 
@@ -167,6 +167,9 @@
                         DDLogDebug(@"Discovered services");
                         @strongify(self)
                         [self.tableView reloadData];
+                    }
+                    error:^(NSError *error) {
+                        DDLogError(@"Error while discovering services : %@", error);
                     }];
 }
 
@@ -176,7 +179,7 @@
                 DDLogDebug(@"Disconnected from %@", peripheral);
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while disconnecting from peripheral %@", error);
+                        DDLogError(@"Error while disconnecting from peripheral %@", error);
                     }];
 }
 
@@ -217,7 +220,7 @@
             dematerialize]
             subscribeError:
                     ^(NSError *error) {
-                        DDLogDebug(@"Error during auto discovery = %@", error);
+                        DDLogError(@"Error during auto discovery = %@", error);
                     }
                  completed:
                          ^{

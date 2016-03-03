@@ -15,7 +15,7 @@
 
     self.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", self.characteristic.UUID.UUIDString];
     self.isNotifyingLabel.text = [NSString stringWithFormat:@"Is Notifying: %@", @(self.characteristic.isNotifying)];
-    self.propertiesLabel.text = [NSString stringWithFormat:@"Properties: %@", @(self.characteristic.properties)];
+    self.propertiesLabel.text = [NSString stringWithFormat:@"Properties: %@", [CharacteristicDetailsViewController characteristicPropertiesString:self.characteristic.properties]];
 
     if (self.characteristic.value) {
         self.valueLabel.text = [NSString stringWithFormat:@"Value: %@", self.characteristic.value];
@@ -47,8 +47,26 @@
                 [self.tableView reloadData];
             }
                     error:^(NSError *error) {
-                        DDLogDebug(@"Error while reading descriptors= %@", error);
+                        DDLogError(@"Error while reading descriptors= %@", error);
                     }];
+}
+
+
++ (NSString *)characteristicPropertiesString:(CBCharacteristicProperties)properties {
+    NSMutableArray *propertiesArray = [NSMutableArray array];
+
+    if (properties & CBCharacteristicPropertyBroadcast) {[propertiesArray addObject:@"Broadcast"];}
+    if (properties & CBCharacteristicPropertyRead) {[propertiesArray addObject:@"Read"];}
+    if (properties & CBCharacteristicPropertyWriteWithoutResponse) {[propertiesArray addObject:@"WriteWithoutResponse"];}
+    if (properties & CBCharacteristicPropertyWrite) {[propertiesArray addObject:@"Write"];}
+    if (properties & CBCharacteristicPropertyNotify) {[propertiesArray addObject:@"Notify"];}
+    if (properties & CBCharacteristicPropertyIndicate) {[propertiesArray addObject:@"Indicate"];}
+    if (properties & CBCharacteristicPropertyAuthenticatedSignedWrites) {[propertiesArray addObject:@"AuthenticatedSignedWrites"];}
+    if (properties & CBCharacteristicPropertyExtendedProperties) {[propertiesArray addObject:@"ExtendedProperties"];}
+    if (properties & CBCharacteristicPropertyNotifyEncryptionRequired) {[propertiesArray addObject:@"NotifyEncryptionRequired"];}
+    if (properties & CBCharacteristicPropertyIndicateEncryptionRequired) {[propertiesArray addObject:@"IndicateEncryptionRequired"];}
+
+    return [propertiesArray componentsJoinedByString:@","];
 }
 
 #pragma mark - Actions
@@ -64,14 +82,15 @@
                 self.valueLabel.text = [NSString stringWithFormat:@"Value: %@", self.characteristic.value];
 
             } error:^(NSError *error) {
-        DDLogDebug(@"Error while reading value for characteristic %@ = %@", self.characteristic, error);
+        DDLogError(@"Error while reading value for characteristic %@ = %@", self.characteristic, error);
     }];
 }
 
 
-- (IBAction)didTapReadyAndNotifyButton:(id)sender {
+- (IBAction)didTapReadAndNotifyButton:(id)sender {
     @weakify(self)
 
+    DDLogDebug(@"Will register for notifications in characteristic %@", self.characteristic);
     [[[self.peripheral rac_setNotifyValue:YES andGetUpdatesForChangesInCharacteristic:self.characteristic]
             deliverOnMainThread]
             subscribeNext:^(id x) {
@@ -79,20 +98,21 @@
                 DDLogDebug(@"Successfully read value for characteristic %@", self.characteristic);
                 self.valueLabel.text = [NSString stringWithFormat:@"Value: %@", self.characteristic.value];
             } error:^(NSError *error) {
-        DDLogDebug(@"Error while registering for notifications for characteristic %@ = %@", self.characteristic, error);
+        DDLogError(@"Error while registering for notifications for characteristic %@ = %@", self.characteristic, error);
     }];
 }
 
 - (IBAction)didTapWriteButton:(id)sender {
-    NSInteger *dataToWrite;
+    NSInteger dataToWrite = [self.characteristicNewValueTextField.text integerValue];
     NSMutableData *mutableDataToWrite = [NSMutableData data];
-    [mutableDataToWrite appendBytes:&dataToWrite length:sizeof(dataToWrite)];
+    [mutableDataToWrite appendBytes:&dataToWrite length:(NSUInteger) [self.valueSizeTextField.text integerValue]];
+
     CBCharacteristicWriteType writeType = self.writeResponseSwitch.on ? CBCharacteristicWriteWithResponse : CBCharacteristicWriteWithoutResponse;
     [[self.peripheral rac_writeValue:mutableDataToWrite forCharacteristic:self.characteristic writeType:writeType]
             subscribeNext:^(id _) {
-                DDLogDebug(@"Successfully written data to characteristic");
+                DDLogDebug(@"Successfully written data to characteristic %@", self.characteristic);
             } error:^(NSError *error) {
-        DDLogDebug(@"Error while writing to characteristic= %@", error);
+        DDLogError(@"Error while writing to characteristic = %@", error);
     }];
 }
 
