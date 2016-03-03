@@ -12,10 +12,6 @@
     self.tableView.dataSource = self;
 
     self.title = [NSString stringWithFormat:@"Characteristic: %@", self.characteristic.UUID.UUIDString];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 
     self.uuidLabel.text = [NSString stringWithFormat:@"UUID: %@", self.characteristic.UUID.UUIDString];
     self.isNotifyingLabel.text = [NSString stringWithFormat:@"Is Notifying: %@", @(self.characteristic.isNotifying)];
@@ -27,8 +23,8 @@
 
     @weakify(self)
     [[[[[self.peripheral rac_discoverDescriptorsForCharacteristic:self.characteristic]
-            doNext:^(id x) {
-                NSLog(@"Successfully read descriptors for %@", self.characteristic);
+            doNext:^(id _) {
+                DDLogDebug(@"Successfully read descriptors for %@", self.characteristic);
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     @strongify(self)
@@ -36,6 +32,7 @@
                 });
             }]
             flattenMap:^RACStream *(id _) {
+                @strongify(self)
                 NSMutableArray *readDescriptorValuesSignals = [NSMutableArray array];
                 for (CBDescriptor *descriptor in self.characteristic.descriptors) {
                     [readDescriptorValuesSignals addObject:[self.peripheral rac_readValueForDescriptor:descriptor]];
@@ -45,17 +42,16 @@
             }]
             deliverOnMainThread]
             subscribeNext:^(id _) {
-                NSLog(@"Successfully read all descriptor values");
                 @strongify(self)
+                DDLogDebug(@"Successfully read all descriptor values");
                 [self.tableView reloadData];
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while reading descriptors= %@", error);
+                        DDLogDebug(@"Error while reading descriptors= %@", error);
                     }];
 }
 
 #pragma mark - Actions
-
 
 - (IBAction)didTapReadButton:(id)sender {
     @weakify(self)
@@ -63,12 +59,12 @@
             deliverOnMainThread]
             subscribeNext:^(id _) {
                 @strongify(self)
-                NSLog(@"Successfully read value for characteristic %@", self.characteristic);
+                DDLogDebug(@"Successfully read value for characteristic %@", self.characteristic);
 
                 self.valueLabel.text = [NSString stringWithFormat:@"Value: %@", self.characteristic.value];
 
             } error:^(NSError *error) {
-        NSLog(@"Error while reading value for characteristic %@ = %@", self.characteristic, error);
+        DDLogDebug(@"Error while reading value for characteristic %@ = %@", self.characteristic, error);
     }];
 }
 
@@ -80,10 +76,10 @@
             deliverOnMainThread]
             subscribeNext:^(id x) {
                 @strongify(self)
-                NSLog(@"Successfully read value for characteristic %@", self.characteristic);
+                DDLogDebug(@"Successfully read value for characteristic %@", self.characteristic);
                 self.valueLabel.text = [NSString stringWithFormat:@"Value: %@", self.characteristic.value];
             } error:^(NSError *error) {
-        NSLog(@"Error while registering for notifications for characteristic %@ = %@", self.characteristic, error);
+        DDLogDebug(@"Error while registering for notifications for characteristic %@ = %@", self.characteristic, error);
     }];
 }
 
@@ -94,9 +90,9 @@
     CBCharacteristicWriteType writeType = self.writeResponseSwitch.on ? CBCharacteristicWriteWithResponse : CBCharacteristicWriteWithoutResponse;
     [[self.peripheral rac_writeValue:mutableDataToWrite forCharacteristic:self.characteristic writeType:writeType]
             subscribeNext:^(id _) {
-                NSLog(@"Successfully written data to characteristic");
+                DDLogDebug(@"Successfully written data to characteristic");
             } error:^(NSError *error) {
-        NSLog(@"Error while writing to characteristic= %@", error);
+        DDLogDebug(@"Error while writing to characteristic= %@", error);
     }];
 }
 

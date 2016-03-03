@@ -17,3 +17,7 @@
 
 @import ReactiveCocoa;
 @import CoreBluetooth;
+@import CocoaLumberjack;
+@import LumberjackConsole;
+
+static const DDLogLevel ddLogLevel = DDLogLevelAll;

@@ -6,6 +6,7 @@
 #import "ServiceDetailsViewController.h"
 #import <Tweaks/FBTweak.h>
 #import <Tweaks/FBTweakInline.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @implementation PeripheralDetailsViewController {
 
@@ -22,7 +23,7 @@
             deliverOnMainThread]
             subscribeNext:
                     ^(NSString *name) {
-                        NSLog(@"Received name %@", name);
+                        DDLogDebug(@"Received name %@", name);
                         @strongify(self)
                         self.title = [NSString stringWithFormat:@"Peripheral: %@", name];
                         self.nameLabel.text = [NSString stringWithFormat:@"Name: %@", name];
@@ -132,14 +133,14 @@
     [[self.centralManager rac_connectPeripheral:self.peripheral options:nil]
             subscribeNext:^(CBPeripheral *peripheral) {
                 @strongify(self)
-                NSLog(@"Connected to %@", peripheral);
+                DDLogDebug(@"Connected to %@", peripheral);
                 BOOL autoDiscovery = FBTweakValue(@"General", @"Helpers", @"Auto discovery", YES);
                 if (autoDiscovery) {
                     [self autoDiscover];
                 }
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while connecting to peripheral %@", error);
+                        DDLogDebug(@"Error while connecting to peripheral %@", error);
                     }];
 }
 
@@ -149,11 +150,11 @@
             deliverOnMainThread]
             subscribeNext:^(NSNumber *RSSI) {
                 @strongify(self)
-                NSLog(@"RSSI = %@", RSSI);
+                DDLogDebug(@"RSSI = %@", RSSI);
                 self.rssiLabel.text = [NSString stringWithFormat:@"RSSI: %@", RSSI];
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while reading RSSI: %@", error);
+                        DDLogDebug(@"Error while reading RSSI: %@", error);
                     }];
 }
 
@@ -163,7 +164,7 @@
             deliverOnMainThread]
             subscribeNext:
                     ^(id __) {
-                        NSLog(@"Discovered services");
+                        DDLogDebug(@"Discovered services");
                         @strongify(self)
                         [self.tableView reloadData];
                     }];
@@ -172,19 +173,22 @@
 - (void)disconnect {
     [[self.centralManager rac_disconnectPeripheralConnection:self.peripheral]
             subscribeNext:^(CBPeripheral *peripheral) {
-                NSLog(@"Disconnected from %@", peripheral);
+                DDLogDebug(@"Disconnected from %@", peripheral);
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while disconnecting from peripheral %@", error);
+                        DDLogDebug(@"Error while disconnecting from peripheral %@", error);
                     }];
 }
 
 - (void)autoDiscover {
     @weakify(self)
-    [[[[[[[self.peripheral rac_readRSSI]
+
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+    [[[[[[[[self.peripheral rac_readRSSI]
             flattenMap:^RACStream *(NSNumber *rssi) {
                 @strongify(self)
-                NSLog(@"Read RSSI %@", rssi);
+                DDLogDebug(@"Read RSSI %@", rssi);
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     @strongify(self)
@@ -195,7 +199,7 @@
             }]
             flattenMap:^RACStream *(NSArray *services) {
                 @strongify(self)
-                NSLog(@"Discovered all 1st level services (%@ found)", @(services.count));
+                DDLogDebug(@"Discovered all 1st level services (%@ found)", @(services.count));
                 NSMutableArray *processServicesArray = [NSMutableArray array];
 
                 for (CBService *service in services) {
@@ -208,27 +212,32 @@
             doNext:^(id _) {
                 @strongify(self)
                 [self.tableView reloadData];
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             }]
+            dematerialize]
             subscribeError:
                     ^(NSError *error) {
-                        NSLog(@"Error during auto discovery = %@", error);
+                        DDLogDebug(@"Error during auto discovery = %@", error);
                     }
                  completed:
                          ^{
-                             NSLog(@"Auto discovery complete");
+                             DDLogDebug(@"Auto discovery complete");
                          }];
 }
 
 - (RACSignal *)processService:(CBService *)service {
-    RACSignal *processServiceWithIncludedServicesSignal = [[service.peripheral rac_discoverIncludedServices:@[] forService:service]
+    @weakify(self)
+    RACSignal *processServiceWithIncludedServicesSignal = [[service.peripheral
+            rac_discoverIncludedServices:nil forService:service]
             flattenMap:^RACStream *(NSArray *includedServices) {
+                @strongify(self)
                 NSMutableArray *processIncludedServices = [NSMutableArray array];
 
                 for (CBService *includedService in includedServices) {
                     [processIncludedServices addObject:[self processService:includedService]];
                 }
 
-                NSLog(@"Will process %@ more services", @(includedServices.count));
+                DDLogDebug(@"Will process %@ more services", @(includedServices.count));
                 return includedServices.count == 0 ? [RACSignal return:@YES] : [RACSignal zip:processIncludedServices];
             }];
     RACSignal *processServiceWithoutIncludedServicesSignal = [self discoverAndReadCharacteristicsForService:service];
@@ -241,10 +250,11 @@
 
 - (RACSignal *)discoverAndReadCharacteristicsForService:(CBService *)service {
     @weakify(self)
-    return [[[service.peripheral rac_discoverCharacteristics:@[] forService:service]
+    return [[[service.peripheral
+            rac_discoverCharacteristics:nil forService:service]
             flattenMap:^RACStream *(NSArray *characteristics) {
                 @strongify(self)
-                NSLog(@"Read characteristics for service %@ : %@", service, characteristics);
+                DDLogDebug(@"Read characteristics for service %@ : %@", service, characteristics);
                 NSMutableArray *readCharacteristicsArray = [NSMutableArray array];
 
                 for (CBCharacteristic *characteristic in characteristics) {
@@ -254,7 +264,7 @@
                 return characteristics.count == 0 ? [RACSignal return:@YES] : [RACSignal zip:readCharacteristicsArray];
             }]
             doNext:^(id _) {
-                NSLog(@"Read all characteristics for service %@", service);
+                DDLogDebug(@"Read all characteristics for service %@", service);
             }];
 }
 
@@ -262,7 +272,7 @@
 - (RACSignal *)discoverAndReadDescriptorsForCharacteristic:(CBCharacteristic *)characteristic {
     return [[[[[characteristic.service.peripheral rac_discoverDescriptorsForCharacteristic:characteristic]
             flattenMap:^RACStream *(NSArray *descriptors) {
-                NSLog(@"Discovered descriptors for characteristic %@ : %@", characteristic, descriptors);
+                DDLogDebug(@"Discovered descriptors for characteristic %@ : %@", characteristic, descriptors);
                 NSMutableArray *readDescriptorsArray = [NSMutableArray array];
 
                 for (CBDescriptor *descriptor in descriptors) {
@@ -272,13 +282,13 @@
                 return descriptors.count == 0 ? [RACSignal return:@YES] : [RACSignal zip:readDescriptorsArray];
             }]
             doNext:^(id _) {
-                NSLog(@"Read all descriptors values for characteristic: %@", characteristic);
+                DDLogDebug(@"Read all descriptors values for characteristic: %@", characteristic);
             }]
             flattenMap:^RACStream *(id _) {
                 return [characteristic.service.peripheral rac_readValueForCharacteristic:characteristic];
             }]
             doNext:^(id _) {
-                NSLog(@"Read characteristic value %@", characteristic);
+                DDLogDebug(@"Read value for chracteristic %@", characteristic);
             }];
 }
 

@@ -44,27 +44,26 @@
     [[[self.service.peripheral rac_discoverIncludedServices:nil forService:self.service]
             deliverOnMainThread]
             subscribeNext:^(id _) {
-                NSLog(@"Discovered included services for %@", self.service);
+                DDLogDebug(@"Discovered included services for %@", self.service);
                 @strongify(self)
                 [self.tableView reloadData];
 
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while discovering included services = %@", error);
+                        DDLogDebug(@"Error while discovering included services = %@", error);
                     }];
 
     [[[self.service.peripheral rac_discoverCharacteristics:nil forService:self.service]
             deliverOnMainThread]
             subscribeNext:^(id _) {
                 @strongify(self)
-                NSLog(@"Discovered characteristics for service %@", self.service);
+                DDLogDebug(@"Discovered characteristics for service %@", self.service);
                 [self.tableView reloadData];
             }
                     error:^(NSError *error) {
-                        NSLog(@"Error while discovering characteristics = %@", error);
+                        DDLogDebug(@"Error while discovering characteristics = %@", error);
                     }];
 }
-
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 

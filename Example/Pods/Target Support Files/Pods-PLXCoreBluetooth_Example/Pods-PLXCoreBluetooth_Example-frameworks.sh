@@ -84,11 +84,19 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-PLXCoreBluetooth_Example/CocoaLumberjack.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/LumberjackConsole.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/MBProgressHUD.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/NBUCore.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/PLXCoreBluetooth.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/ReactiveCocoa.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/Tweaks.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-PLXCoreBluetooth_Example/CocoaLumberjack.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/LumberjackConsole.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/MBProgressHUD.framework"
+  install_framework "Pods-PLXCoreBluetooth_Example/NBUCore.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/PLXCoreBluetooth.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/ReactiveCocoa.framework"
   install_framework "Pods-PLXCoreBluetooth_Example/Tweaks.framework"

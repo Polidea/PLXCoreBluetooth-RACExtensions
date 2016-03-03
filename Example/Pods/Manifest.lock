@@ -1,5 +1,18 @@
 PODS:
+  - CocoaLumberjack (2.2.0):
+    - CocoaLumberjack/Default (= 2.2.0)
+    - CocoaLumberjack/Extensions (= 2.2.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.2.0):
+    - CocoaLumberjack/Default
   - Expecta (1.0.5)
+  - LumberjackConsole (2.4.3):
+    - CocoaLumberjack (>= 2.0.0)
+    - NBUCore (>= 2.0.3)
+  - MBProgressHUD (0.9.2)
+  - NBUCore (2.0.4)
   - PLXCoreBluetooth (0.1.0):
     - ReactiveCocoa (= 2.5)
   - ReactiveCocoa (2.5):
@@ -13,29 +26,43 @@ PODS:
   - Tweaks (2.0.0)
 
 DEPENDENCIES:
+  - CocoaLumberjack (= 2.2.0)
   - Expecta
+  - LumberjackConsole (from `https://github.com/PTEz/LumberjackConsole.git`, commit `7b0e7569ecce97ed8592277b471babd3769a6919`)
+  - MBProgressHUD (= 0.9.2)
   - PLXCoreBluetooth (from `../`)
   - Specta
-  - Tweaks (from `https://github.com/facebook/Tweaks.git`)
+  - Tweaks (from `https://github.com/facebook/Tweaks.git`, commit `de1349ffc4c96d25e21f120fe4a54bb198414a14`)
 
 EXTERNAL SOURCES:
+  LumberjackConsole:
+    :commit: 7b0e7569ecce97ed8592277b471babd3769a6919
+    :git: https://github.com/PTEz/LumberjackConsole.git
   PLXCoreBluetooth:
     :path: ../
   Tweaks:
+    :commit: de1349ffc4c96d25e21f120fe4a54bb198414a14
     :git: https://github.com/facebook/Tweaks.git
 
 CHECKOUT OPTIONS:
+  LumberjackConsole:
+    :commit: 7b0e7569ecce97ed8592277b471babd3769a6919
+    :git: https://github.com/PTEz/LumberjackConsole.git
   Tweaks:
     :commit: de1349ffc4c96d25e21f120fe4a54bb198414a14
     :git: https://github.com/facebook/Tweaks.git
 
 SPEC CHECKSUMS:
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
+  LumberjackConsole: 81bad3312fea315b8a17e53926b014f032ec1f44
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  NBUCore: 89cbf3976cae47c358fd0ed8562ef66d79a8904a
   PLXCoreBluetooth: 1d246824705baa72bcf353922b13c5716225fdda
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
   Tweaks: 524fa47636cce3bf3a4d9156e980f10ae9480e81
 
-PODFILE CHECKSUM: 94e9bb1c2bf1b4497e706468554ac5d6b96e9bac
+PODFILE CHECKSUM: facba78336154254eb5f3d464e14cd6a71b5ec08
 
 COCOAPODS: 1.0.0.beta.3

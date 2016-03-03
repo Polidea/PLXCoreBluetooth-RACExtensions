@@ -8,6 +8,7 @@
 
 #import <Tweaks/FBTweakShakeWindow.h>
 #import <Tweaks/FBTweakInline.h>
+#import <LumberjackConsole/PTEDashboard.h>
 #import "PLXAppDelegate.h"
 
 @implementation PLXAppDelegate
@@ -15,7 +16,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [PTEDashboard.sharedDashboard show];
 
     return YES;
 }

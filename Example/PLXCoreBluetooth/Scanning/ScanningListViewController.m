@@ -79,7 +79,7 @@
                 });
             }
                     error:^(NSError *error) {
-                        NSLog(@"scan error = %@", error);
+                        DDLogDebug(@"scan error = %@", error);
                     }];
 
     self.scanButton.title = @"Stop scanning";
