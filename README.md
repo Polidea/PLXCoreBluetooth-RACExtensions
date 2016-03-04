@@ -1,15 +1,26 @@
 # PLXCoreBluetooth
 
-[![CI Status](http://img.shields.io/travis/Michal Mizera/PLXCoreBluetooth.svg?style=flat)](https://travis-ci.org/Michal Mizera/PLXCoreBluetooth)
-[![Version](https://img.shields.io/cocoapods/v/PLXCoreBluetooth.svg?style=flat)](http://cocoapods.org/pods/PLXCoreBluetooth)
-[![License](https://img.shields.io/cocoapods/l/PLXCoreBluetooth.svg?style=flat)](http://cocoapods.org/pods/PLXCoreBluetooth)
-[![Platform](https://img.shields.io/cocoapods/p/PLXCoreBluetooth.svg?style=flat)](http://cocoapods.org/pods/PLXCoreBluetooth)
+`PLXCoreBluetooth` is a thin abstraction layer over `CBCentralManager` and `CBPeripheral` that enables programming using Reactive Cocoa.
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+### Sample App
+
+Take a look at example app, it illustrates all common usage cases pretty straightforward.
+To run it, clone the repo, and run `pod install` from the Example directory first or run `pod try PLXCoreBluetooth`.
+
+### API
+
+
+
+### Examples
+
+
 
 ## Requirements
+
+- iOS 8.0+
+- Xcode 7.2+
 
 ## Installation
 
@@ -22,7 +33,8 @@ pod "PLXCoreBluetooth"
 
 ## Author
 
-Maciej Oczko, maciej.oczko@polidea.com
+Maciej Oczko, maciek.oczko@polidea.com
+
 Michal Mizera, michal.mizera@polidea.com
 
 ## License
