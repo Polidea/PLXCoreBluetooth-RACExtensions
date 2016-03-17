@@ -14,22 +14,25 @@ To run it, clone the repo, and run `pod install` from the Example directory firs
 Let's try to scan for some peripherals, connect to them, discover characteristics for given services and read them. Easy.
 
 ```objc
-[[[[self.centralManager rac_scanForPeripheralsWithServices:[mySpecialService]
-                                                     count:[PLXCBCentralManagerScanInfiniteCount
+[[[[self.centralManager rac_scanForPeripheralsWithServices:@[mySpecialService]
+                                                     count:PLXCBCentralManagerScanInfiniteCount
                                                    options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
         reduceEach:^id(CBPeripheral *peripheral, NSDictionary<NSString *, id> *advertisementData, NSNumber *RSSI) {
             return peripheral;
         }]
         flattenMap:^RACSignal *(CBPeripheral *peripheral) {
-            return [self.centralManager rac_connectPeripheral:peripheral options:nil];
-        }]
-        flattenMap:^RACSignal *(CBPeripheral *peripheral) {
-            return [peripheral rac_discoverCharacteristics:nil forService:mySpecialService];
-        }]
-        flattenMap:^RACSignal *(NSArray<CBCharacteristic *> *characteristics) {
-            return [[[characteristics.rac_sequence signal] flattenMap:^RACSignal *(CBCharacteristic *characteristic) {
-                return [peripheral rac_readValueForCharacteristic:characteristic];
-            }] collect];
+            return [[[self.centralManager
+                    rac_connectPeripheral:peripheral options:nil]
+                    flattenMap:^RACSignal *(CBPeripheral *_) {
+                        return [peripheral rac_discoverCharacteristics:nil forService:mySpecialService];
+                    }]
+                    flattenMap:^RACSignal *(NSArray<CBCharacteristic *> *characteristics) {
+                        return [[[characteristics.rac_sequence signal]
+                                flattenMap:^RACSignal *(CBCharacteristic *characteristic) {
+                                    return [peripheral rac_readValueForCharacteristic:characteristic];
+                                }]
+                                collect];
+                    }];
         }]
 ```
 

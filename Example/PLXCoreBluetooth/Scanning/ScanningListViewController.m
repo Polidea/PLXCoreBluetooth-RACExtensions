@@ -138,18 +138,22 @@
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     @weakify(self)
-    UITableViewRowAction *showAdvDictAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Show Adv Details" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath2) {
-        @strongify(self)
-        NSDictionary *advDataDict = [self peripheralDataForIndexPath:indexPath2].second;
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Adv Data"
-                                                                                 message:[NSString stringWithFormat:@"%@", advDataDict]
-                                                                          preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"Ok"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:nil];
-        [alertController addAction:actionOk];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }];
+    UITableViewRowAction *showAdvDictAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal
+                                                                                 title:@"Show Adv Details"
+                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath2) {
+                                                                                   @strongify(self)
+                                                                                   NSDictionary *advDataDict = [self peripheralDataForIndexPath:indexPath2].second;
+                                                                                   UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Adv Data"
+                                                                                                                                                            message:[NSString stringWithFormat:@"%@",
+                                                                                                                                                                                               advDataDict]
+                                                                                                                                                     preferredStyle:UIAlertControllerStyleAlert];
+                                                                                   UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"Ok"
+                                                                                                                                      style:UIAlertActionStyleDefault
+                                                                                                                                    handler:nil];
+                                                                                   [alertController addAction:actionOk];
+                                                                                   [self presentViewController:alertController animated:YES
+                                                                                                    completion:nil];
+                                                                               }];
 
     return @[showAdvDictAction];
 }
