@@ -19,7 +19,7 @@ This is a property that determines whether all methods below should continue onl
 
 By default set to NO.
 
-```
+```objc
 @property(nonatomic, assign) BOOL plx_shouldWaitUntilPoweredOn;
 ```
 
@@ -31,7 +31,7 @@ For infinite scan count there should be passed `PLXCBCentralManagerScanInfiniteC
 If scan is limited and all peripherals are discovered `stopScan` will be called automatically.
 `stopScan` will be called as well when signal is disposed.
 
-```
+```objc
 - (RACSignal *)rac_scanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs
                                             count:(NSInteger)count
                                           options:(nullable NSDictionary<NSString *, id> *)options;
@@ -39,7 +39,7 @@ If scan is limited and all peripherals are discovered `stopScan` will be called 
 
 Stop scan method is just a wrapper for `stopScan` that returns `@YES` after calling it.
 
-```
+```objc
 - (RACSignal *)rac_stopScan;
 ```
 
@@ -47,14 +47,14 @@ Stop scan method is just a wrapper for `stopScan` that returns `@YES` after call
 
 Connect method connects to the peripheral and returns it on success. On connection failure it returns error signal.
 
-```
+```objc
 - (RACSignal *)rac_connectPeripheral:(CBPeripheral *)peripheral
                              options:(nullable NSDictionary<NSString *, id> *)options;
 ```
 
 Disconnect method disconnects from the peripheral and returns it on success. On disconnection failure it returns error signal.
 
-```
+```objc
 - (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral;
 ```
 
@@ -62,7 +62,7 @@ Disconnect method disconnects from the peripheral and returns it on success. On 
 
 There's a signal that is updated whenever power on property changes.
 
-```
+```objc
 - (RACSignal *)rac_isPoweredOn;
 ```
 
