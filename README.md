@@ -11,10 +11,62 @@ To run it, clone the repo, and run `pod install` from the Example directory firs
 
 ### API
 
+There are two sets of extensions, first for `CBCentralManager`, second for `CBPeripheral`.
 
+#### `CBCentralManager`
+
+This is a property that determines whether all methods below should continue only if `CBCentralManager` is in powered on state. If it's set to YES each of them will be blocking and will wait for powered on state. Otherwise, default behavior is to finish immediately with error.
+
+By default set to NO.
+
+```
+@property(nonatomic, assign) BOOL plx_shouldWaitUntilPoweredOn;
+```
+
+##### Scanning
+
+Scan method returns signal with first `count` scanned peripherals for given services.
+For infinite scan count there should be passed `PLXCBCentralManagerScanInfiniteCount`.
+
+If scan is limited and all peripherals are discovered `stopScan` will be called automatically.
+`stopScan` will be called as well when signal is disposed.
+
+```
+- (RACSignal *)rac_scanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs
+                                            count:(NSInteger)count
+                                          options:(nullable NSDictionary<NSString *, id> *)options;
+```
+
+Stop scan method is just a wrapper for `stopScan` that returns `@YES` after calling it.
+
+```
+- (RACSignal *)rac_stopScan;
+```
+
+##### Connecting
+
+Connect method connects to the peripheral and returns it on success. On connection failure it returns error signal.
+
+```
+- (RACSignal *)rac_connectPeripheral:(CBPeripheral *)peripheral
+                             options:(nullable NSDictionary<NSString *, id> *)options;
+```
+
+Disconnect method disconnects from the peripheral and returns it on success. On disconnection failure it returns error signal.
+
+```
+- (RACSignal *)rac_disconnectPeripheralConnection:(CBPeripheral *)peripheral;
+```
+
+##### Misc
+
+There's a signal that is updated whenever power on property changes.
+
+```
+- (RACSignal *)rac_isPoweredOn;
+```
 
 ### Examples
-
 
 
 ## Requirements
@@ -31,7 +83,7 @@ it, simply add the following line to your Podfile:
 pod "PLXCoreBluetooth"
 ```
 
-## Author
+## Authors
 
 Maciej Oczko, maciek.oczko@polidea.com
 
