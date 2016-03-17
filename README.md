@@ -9,7 +9,29 @@
 Take a look at example app, it illustrates all common usage cases pretty straightforward.
 To run it, clone the repo, and run `pod install` from the Example directory first or run `pod try PLXCoreBluetooth`.
 
-### Examples
+### Example
+
+Let's try to scan for some peripherals, connect to them, discover characteristics for given services and read them. Easy.
+
+```objc
+[[[[self.centralManager rac_scanForPeripheralsWithServices:[mySpecialService]
+                                                     count:[PLXCBCentralManagerScanInfiniteCount
+                                                   options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
+        reduceEach:^id(CBPeripheral *peripheral, NSDictionary<NSString *, id> *advertisementData, NSNumber *RSSI) {
+            return peripheral;
+        }]
+        flattenMap:^RACSignal *(CBPeripheral *peripheral) {
+            return [self.centralManager rac_connectPeripheral:peripheral options:nil];
+        }]
+        flattenMap:^RACSignal *(CBPeripheral *peripheral) {
+            return [peripheral rac_discoverCharacteristics:nil forService:mySpecialService];
+        }]
+        flattenMap:^RACSignal *(NSArray<CBCharacteristic *> *characteristics) {
+            return [[[characteristics.rac_sequence signal] flattenMap:^RACSignal *(CBCharacteristic *characteristic) {
+                return [peripheral rac_readValueForCharacteristic:characteristic];
+            }] collect];
+        }]
+```
 
 ### API
 
@@ -27,7 +49,7 @@ By default set to NO.
 
 ##### Scanning
 
-Scan method returns signal with first `count` scanned peripherals for given services.
+Scan method returns signal with first `count` scanned peripherals info tuples (peripheral, advertisementData, RSSI) for given services.
 For infinite scan count there should be passed `PLXCBCentralManagerScanInfiniteCount`.
 
 If scan is limited and all peripherals are discovered `stopScan` will be called automatically.
