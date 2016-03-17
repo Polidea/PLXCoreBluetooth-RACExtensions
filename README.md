@@ -9,6 +9,8 @@
 Take a look at example app, it illustrates all common usage cases pretty straightforward.
 To run it, clone the repo, and run `pod install` from the Example directory first or run `pod try PLXCoreBluetooth`.
 
+### Examples
+
 ### API
 
 There are two sets of extensions, first for `CBCentralManager`, second for `CBPeripheral`.
@@ -66,8 +68,112 @@ There's a signal that is updated whenever power on property changes.
 - (RACSignal *)rac_isPoweredOn;
 ```
 
-### Examples
+#### `CBPeripheral`
 
+This is a property that determines whether all methods below should continue only if `CBPeripheral` is in connected state. If it's set to YES each of them will be blocking and will wait for connected state. Otherwise, default behavior is to finish immediately with error.
+
+By default set to NO.
+
+```objc
+@property(nonatomic, assign) BOOL plx_shouldWaitUntilConnected;
+```
+
+This property returns most recent name and subscribes for peripheral name changes.
+
+```objc
+@property(nonatomic, strong, readonly) RACSignal *rac_name;
+```
+
+This method returns signal subscribed for peripheral name changes.
+
+```objc
+- (RACSignal *)rac_peripheralDidUpdateName;
+```
+
+This method returns signal containing services peripheral that have been changed over time.
+
+```objc
+- (RACSignal *)rac_peripheralDidModifyServices;
+```
+
+##### Discovery
+
+Returns an array of discovered services.
+
+```objc
+- (RACSignal *)rac_discoverServices:(nullable NSArray<CBUUID *> *)serviceUUIDs;
+```
+
+Returns an array of discovered included services for given service.
+
+```objc
+- (RACSignal *)rac_discoverIncludedServices:(nullable NSArray<CBUUID *> *)includedServiceUUIDs
+                                 forService:(CBService *)service;
+```
+
+Returns an array of discovered characteristics for given service.
+
+```objc
+- (RACSignal *)rac_discoverCharacteristics:(nullable NSArray<CBUUID *> *)characteristicUUIDs
+                                forService:(CBService *)service;
+```
+
+Returns an array of discovered descriptors for given characteristic.
+
+```objc
+- (RACSignal *)rac_discoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic;
+```
+
+##### Reading
+
+This method returns RSSI and completes, error signal otherwise.
+
+```objc
+- (RACSignal *)rac_readRSSI;
+```
+
+Those methods return read value and complete on successful read, error otherwise.
+
+```objc
+- (RACSignal *)rac_readValueForCharacteristic:(CBCharacteristic *)characteristic;
+
+- (RACSignal *)rac_readValueForDescriptor:(CBDescriptor *)descriptor;
+```
+
+##### Writing
+
+Those methods return boolean YES and complete on successful write, error otherwise.
+
+```objc
+- (RACSignal *)rac_writeValue:(NSData *)data
+            forCharacteristic:(CBCharacteristic *)characteristic
+                    writeType:(CBCharacteristicWriteType)writeType;
+
+- (RACSignal *)rac_writeValue:(NSData *)data
+                forDescriptor:(CBDescriptor *)descriptor;
+```
+
+##### Updating
+
+This method returns boolean YES and completes if change succeeds, or error otherwise.
+
+```objc
+- (RACSignal *)rac_setNotifyValue:(BOOL)enabled
+       forChangesInCharacteristic:(CBCharacteristic *)characteristic;
+```
+
+This method returns updated values (from `peripheral:didUpdateValueForCharacteristic:error:` callback), or error if update fails.
+
+```objc
+- (RACSignal *)rac_setNotifyValue:(BOOL)enabled
+andGetUpdatesForChangesInCharacteristic:(CBCharacteristic *)characteristic;
+```
+
+This method returns stream of signals with value or error (taken from `peripheral:didUpdateValueForCharacteristic:error:` callback).
+
+```objc
+- (RACSignal *)rac_listenForUpdatesForCharacteristic:(nullable CBCharacteristic *)characteristic;
+```
 
 ## Requirements
 
