@@ -1,41 +1,21 @@
-#
-# Be sure to run `pod lib lint PLXCoreBluetooth.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "PLXCoreBluetooth"
   s.version          = "0.1.0"
-  s.summary          = "Will contain summary PLXCoreBluetooth."
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!  
+  s.summary          = "Reactive Extensions for CoreBluetooth"
   s.description      = <<-DESC
-Lorem ipsum
+PLXCoreBluetooth is a thin abstraction layer over CBCentralManager and CBPeripheral that enables programming using Reactive Cocoa.
                        DESC
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/Polidea/PLXCoreBluetooth-RACExtensions"
   s.license          = 'MIT'
-  s.author           = { "Michal Mizera" => "axadiw@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.authors          = { "Michal Mizera" => "axadiw@gmail.com", "Maciej Oczko" => "maciejoczko@gmail.com" }
+  s.source           = { :git => "https://github.com/Polidea/PLXCoreBluetooth-RACExtensions.git", :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/polidea'
 
-  s.platform     = :ios, '7.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'PLXCoreBluetooth' => ['Pod/Assets/*.png']
-  }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-   s.frameworks = 'CoreBluetooth', 'ReactiveCocoa'
-   s.dependency 'ReactiveCocoa', '2.5'
+  s.frameworks = 'CoreBluetooth', 'ReactiveCocoa'
+  s.dependency 'ReactiveCocoa', '2.5'
 end
