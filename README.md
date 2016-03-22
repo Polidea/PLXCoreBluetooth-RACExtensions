@@ -15,7 +15,7 @@ Let's try to scan for some peripherals, connect to them, discover characteristic
 
 ```objc
 
-@weakify
+@weakify(self)
 [[[[self.centralManager rac_scanForPeripheralsWithServices:@[mySpecialService]
                                                      count:PLXCBCentralManagerScanInfiniteCount
                                                    options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
