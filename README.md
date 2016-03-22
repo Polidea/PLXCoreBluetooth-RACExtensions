@@ -14,6 +14,8 @@ To run it, clone the repo, and run `pod install` from the Example directory firs
 Let's try to scan for some peripherals, connect to them, discover characteristics for given services and read them. Easy.
 
 ```objc
+
+@weakify
 [[[[self.centralManager rac_scanForPeripheralsWithServices:@[mySpecialService]
                                                      count:PLXCBCentralManagerScanInfiniteCount
                                                    options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}]
@@ -21,6 +23,7 @@ Let's try to scan for some peripherals, connect to them, discover characteristic
             return peripheral;
         }]
         flattenMap:^RACSignal *(CBPeripheral *peripheral) {
+            @strongify(self)
             return [[[self.centralManager
                     rac_connectPeripheral:peripheral options:nil]
                     flattenMap:^RACSignal *(CBPeripheral *_) {
