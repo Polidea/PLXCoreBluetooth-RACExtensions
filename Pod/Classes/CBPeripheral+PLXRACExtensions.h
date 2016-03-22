@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param characteristic	The characteristic whose characteristic value will be written.
  *  @param type				The type of write to be executed.
  *
- *  @discussion				This method returns signal with <code>@YES</code> and completes if read succeeds, error otherwise.
+ *  @discussion				This method returns signal with <code>@YES</code> and completes if write succeeds, error otherwise.
  *
  *  @see                    writeValue:forCharacteristic:writeType:
  */
