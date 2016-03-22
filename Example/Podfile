@@ -1,0 +1,17 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+
+target 'PLXCoreBluetooth_Example' do
+  pod 'PLXCoreBluetooth', :path => '../'
+  pod 'Tweaks', :git => 'https://github.com/facebook/Tweaks.git', :commit => 'de1349ffc4c96d25e21f120fe4a54bb198414a14'
+  pod 'MBProgressHUD', '0.9.2'
+  pod 'CocoaLumberjack', '2.2.0'
+  pod 'LumberjackConsole', :git => 'https://github.com/PTEz/LumberjackConsole.git', :commit => '7b0e7569ecce97ed8592277b471babd3769a6919'
+end
+
+target 'PLXCoreBluetooth_Tests' do
+  pod 'PLXCoreBluetooth', :path => '../'
+  pod 'Specta'
+  pod 'Expecta'
+end
