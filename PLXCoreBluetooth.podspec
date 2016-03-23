@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "PLXCoreBluetooth"
-  s.version          = "0.1.0"
+  s.version          = "0.1"
   s.summary          = "Reactive Extensions for CoreBluetooth"
   s.description      = <<-DESC
 PLXCoreBluetooth is a thin abstraction layer over CBCentralManager and CBPeripheral that enables programming using Reactive Cocoa.
