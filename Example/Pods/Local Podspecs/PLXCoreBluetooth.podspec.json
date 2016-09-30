@@ -1,27 +1,24 @@
 {
   "name": "PLXCoreBluetooth",
-  "version": "0.1.0",
-  "summary": "Will contain summary PLXCoreBluetooth.",
-  "description": "Lorem ipsum",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth",
+  "version": "0.2",
+  "summary": "Reactive Extensions for CoreBluetooth",
+  "description": "PLXCoreBluetooth is a thin abstraction layer over CBCentralManager and CBPeripheral that enables programming using Reactive Cocoa.",
+  "homepage": "https://github.com/Polidea/PLXCoreBluetooth-RACExtensions",
   "license": "MIT",
   "authors": {
-    "Michal Mizera": "axadiw@gmail.com"
+    "Michal Mizera": "axadiw@gmail.com",
+    "Maciej Oczko": "maciejoczko@gmail.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/PLXCoreBluetooth.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/Polidea/PLXCoreBluetooth-RACExtensions.git",
+    "tag": "0.2"
   },
+  "social_media_url": "https://twitter.com/polidea",
   "platforms": {
-    "ios": "7.0"
+    "ios": "8.0"
   },
   "requires_arc": true,
   "source_files": "Pod/Classes/**/*",
-  "resource_bundles": {
-    "PLXCoreBluetooth": [
-      "Pod/Assets/*.png"
-    ]
-  },
   "frameworks": [
     "CoreBluetooth",
     "ReactiveCocoa"

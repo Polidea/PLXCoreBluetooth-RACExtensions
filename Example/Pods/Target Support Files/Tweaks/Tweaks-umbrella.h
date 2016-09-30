@@ -1,5 +1,14 @@
 #import <UIKit/UIKit.h>
 
+#import "FBTweak.h"
+#import "FBTweakCategory.h"
+#import "FBTweakCollection.h"
+#import "FBTweakEnabled.h"
+#import "FBTweakInline.h"
+#import "FBTweakInlineInternal.h"
+#import "FBTweakShakeWindow.h"
+#import "FBTweakStore.h"
+#import "FBTweakViewController.h"
 #import "_FBColorComponentCell.h"
 #import "_FBColorUtils.h"
 #import "_FBColorWheelCell.h"
@@ -15,15 +24,6 @@
 #import "_FBTweakColorViewControllerRGBDataSource.h"
 #import "_FBTweakDictionaryViewController.h"
 #import "_FBTweakTableViewCell.h"
-#import "FBTweak.h"
-#import "FBTweakCategory.h"
-#import "FBTweakCollection.h"
-#import "FBTweakEnabled.h"
-#import "FBTweakInline.h"
-#import "FBTweakInlineInternal.h"
-#import "FBTweakShakeWindow.h"
-#import "FBTweakStore.h"
-#import "FBTweakViewController.h"
 
 FOUNDATION_EXPORT double TweaksVersionNumber;
 FOUNDATION_EXPORT const unsigned char TweaksVersionString[];
