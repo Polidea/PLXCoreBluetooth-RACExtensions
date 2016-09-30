@@ -37,7 +37,11 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
 }
 
 - (RACSignal *)_plx_performSignalIfConnected:(RACSignal *)signal {
-    RACSignal *defaultBehaviorSignal = [RACSignal if:[RACSignal return:@(self.state == CBPeripheralStateConnected)]
+    RACSignal *connectedSignal = [[RACObserve(self, state) map:^id(NSNumber *state) {
+        return @(self.state == CBPeripheralStateConnected);
+    }] take:1];
+    
+    RACSignal *defaultBehaviorSignal = [RACSignal if:connectedSignal
                                                 then:signal
                                                 else:[RACSignal error:[NSError plx_peripheraNotConnectedError]]];
 
@@ -337,7 +341,7 @@ static void RACUseDelegateProxy(CBPeripheral *self) {
                                                       if ([notificationValue isKindOfClass:[NSError class]]) {
                                                           return notificationValue;
                                                       }
-                                                      return updateValueSignal;
+                                                      return characteristicValue;
                                                   }];
 
     RACUseDelegateProxy(self);
