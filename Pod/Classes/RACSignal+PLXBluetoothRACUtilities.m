@@ -20,13 +20,12 @@
 
 - (RACSignal *)plx_singleValue {
     return [RACSignal createSignal:^RACDisposable *(id <RACSubscriber> subscriber) {
-        [self subscribeNext:^(id next) {
+        return [self subscribeNext:^(id next) {
             [subscriber sendNext:next];
             [subscriber sendCompleted];
         }             error:^(NSError *error) {
             [subscriber sendError:error];
         }];
-        return nil;
     }];
 }
 
